@@ -113,9 +113,9 @@
 		<url>https://www.cryptoregistry.com/</url>
 	</organization>
 	<scm>
-		<connection>scm:git:git://github.com/buttermilk-crypto/bracket.git</connection>
-		<developerConnection>scm:git:git://github.com/buttermilk-crypto/bracket.git</developerConnection>
-		<url>https://github.com/buttermilk-crypto</url>
+		<connection>scm:git:git://github.com/buttermilk-crypto/b2.git</connection>
+		<developerConnection>scm:git:git://github.com/buttermilk-crypto/b2.git</developerConnection>
+		<url>https://github.com/buttermilk-crypto/b2/bracket-properties</url>
 	</scm>
 	<developers>
 		<developer>

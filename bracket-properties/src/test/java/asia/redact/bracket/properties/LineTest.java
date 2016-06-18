@@ -1,4 +1,4 @@
-package asia.redact.bracket.properties.parse;
+package asia.redact.bracket.properties;
 
 import java.io.IOException;
 import java.io.InputStream;
