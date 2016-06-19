@@ -37,15 +37,14 @@ public class Comment implements Iterable<String> {
 	}
 	
 	public Comment addLine(String line) {
-		if(!line.trim().startsWith("#")){
-			line += "# "+line;
+		StringBuffer buf = new StringBuffer(comments);
+		if(buf.length()>0)buf.append(OutputFormat.lineSeparator);
+		if(!(line.trim().startsWith("#") || line.trim().startsWith("!"))){
+			buf.append("# ");
 		}
-		if(comments.length()>0){
-			StringBuffer buf = new StringBuffer(comments);
-			buf.append(OutputFormat.lineSeparator);
-			buf.append(line);
-			comments = buf.toString();
-		}
+		buf.append(line);
+		comments = buf.toString();
+		
 		return this;
 	}
 	
@@ -55,6 +54,7 @@ public class Comment implements Iterable<String> {
 	 * @return
 	 */
 	public int size() {
+		if(comments.length()==0) return 0;
 		return comments.split("\\n").length;
 	}
 	
@@ -69,16 +69,16 @@ public class Comment implements Iterable<String> {
 
 	@Override
 	public Iterator<String> iterator() {
-		if(comments.length()==0) return new MyIterator(new String[0]);
-		return new MyIterator(comments.split("\\n"));
+		if(comments.length()==0) return new Iter(new String[0]);
+		return new Iter(comments.split("\\n"));
 	}
 	
-	public class MyIterator implements Iterator<String> {
+	private class Iter implements Iterator<String> {
 		
 		private final String [] comments;
 		private int index;
 
-	    public MyIterator(String[] comments) {
+	    public Iter(String[] comments) {
 			super();
 			this.comments = comments;
 			index = 0;

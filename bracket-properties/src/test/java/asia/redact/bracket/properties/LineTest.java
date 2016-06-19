@@ -7,7 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import asia.redact.bracket.properties.line.Line;
@@ -17,53 +18,58 @@ public class LineTest {
 
 	@Test
 	public void test0() {
+
+		String[] files = { 
+				"/crlf/compare.properties",
+				"/crlf/compare.mac.properties",
+				"/crlf/compare.unix.properties" 
+		};
 		
-		List<Line> lines = new ArrayList<Line>();
-		try (
-				InputStream in = this.getClass().getResourceAsStream("/crlf/compare.properties");
+		for (String s : files) {
+			List<Line> lines = new ArrayList<Line>();
+			try (InputStream in = this.getClass().getResourceAsStream(s);
 				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
 				LineScanner scanner = new LineScanner(reader);
-		) {
-			Line line = null;
-			while((line = scanner.line()) != null) {
-				lines.add(line);
+			) {
+				Line line = null;
+				while ((line = scanner.line()) != null) {
+					lines.add(line);
+				}
+
+			} catch (IOException x) {
+				x.printStackTrace();
 			}
 			
-		}catch(IOException x){
-			x.printStackTrace();
+			Assert.assertTrue(lines.size()==5);
 		}
-		
-		try (
-				InputStream in = this.getClass().getResourceAsStream("/crlf/compare.mac.properties");
-				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-				LineScanner scanner = new LineScanner(reader);
-		) {
-			Line line = null;
-			while((line = scanner.line()) != null) {
-				lines.add(line);
-			}
-			
-		}catch(IOException x){
-			x.printStackTrace();
-		}
-		
-		try (
-				InputStream in = this.getClass().getResourceAsStream("/crlf/compare.unix.properties");
-				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-				LineScanner scanner = new LineScanner(reader);
-		) {
-			Line line = null;
-			while((line = scanner.line()) != null) {
-				lines.add(line);
-			}
-			
-		}catch(IOException x){
-			x.printStackTrace();
-		}
-		
-		Assert.assertTrue(lines.size()==15);
 	}
 	
-	
+	@Test
+	public void test1() {
+
+		String[] files = { 
+				"/crlf/test.properties",
+				"/crlf/test.mac.properties", 
+				"/crlf/test.unix.properties" 
+		};
+		
+		for (String s : files) {
+			List<Line> lines = new ArrayList<Line>();
+			try (InputStream in = this.getClass().getResourceAsStream(s);
+				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
+				LineScanner scanner = new LineScanner(reader);
+			) {
+				Line line = null;
+				while ((line = scanner.line()) != null) {
+					lines.add(line);
+				}
+
+			} catch (IOException x) {
+				x.printStackTrace();
+			}
+			
+			Assert.assertTrue(lines.size()==9);
+		}
+	}
 
 }
