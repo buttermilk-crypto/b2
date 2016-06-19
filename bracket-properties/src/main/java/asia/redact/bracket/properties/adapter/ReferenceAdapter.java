@@ -2,6 +2,12 @@ package asia.redact.bracket.properties.adapter;
 
 import asia.redact.bracket.properties.Properties;
 
+/**
+ * Implement a reference scheme (aliasing) for keys within a properties file set
+ * 
+ * @author Dave
+ *
+ */
 public class ReferenceAdapter implements Ref {
 
 	Properties props;

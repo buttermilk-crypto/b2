@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import asia.redact.bracket.properties.adapter.Env;
+import asia.redact.bracket.properties.adapter.Ref;
 import asia.redact.bracket.properties.adapter.Sugar;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;
@@ -22,8 +24,14 @@ public interface Properties {
 	
 	public void put(String key, String ... values);
 	
-	// access to the syntatic sugar interface
+	// access to the syntatic sugar adapter
 	public Sugar sugar();
+	
+	// access to the env templating adapter
+	public Env env();
+	
+	// access to the reference adapter
+	public Ref ref();
 	
 	// Java 8
 	public void forEach(BiConsumer<String,ValueModel> action);

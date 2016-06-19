@@ -11,6 +11,10 @@ import java.util.function.BiConsumer;
 
 import asia.redact.bracket.util.Obfuscate;
 import asia.redact.bracket.properties.Properties;
+import asia.redact.bracket.properties.adapter.Env;
+import asia.redact.bracket.properties.adapter.EnvAdapter;
+import asia.redact.bracket.properties.adapter.Ref;
+import asia.redact.bracket.properties.adapter.ReferenceAdapter;
 import asia.redact.bracket.properties.adapter.Sugar;
 import asia.redact.bracket.properties.adapter.SugarAdapter;
 import asia.redact.bracket.properties.values.BasicValueModel;
@@ -291,6 +295,18 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 	public Sugar sugar() {
 		if(sugar == null) sugar = new SugarAdapter(this);
 		return sugar;
+	}
+
+	@Override
+	public Env env() {
+		if(env == null) env = new EnvAdapter(this);
+		return env;
+	}
+
+	@Override
+	public Ref ref() {
+		if(ref == null) ref = new ReferenceAdapter(this);
+		return ref;
 	}
 
 }

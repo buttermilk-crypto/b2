@@ -15,4 +15,6 @@ public interface Env {
 	static Pattern dotKeyValuePattern = Pattern.compile("\\.\\d+\\.[kv]");
 	static Pattern antStyleVarPattern = Pattern.compile("\\$\\{(.+)\\}");
 	
+	public String resolve(String key);
+	
 }

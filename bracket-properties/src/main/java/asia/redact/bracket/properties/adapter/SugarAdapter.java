@@ -12,7 +12,7 @@ import java.util.List;
 import asia.redact.bracket.properties.Properties;
 
 /**
- * Syntactic sugar - convenience methods
+ * Syntactic sugar - implement convenience accessor methods
  * 
  * @author Dave
  *
