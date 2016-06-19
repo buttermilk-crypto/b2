@@ -9,9 +9,9 @@ import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import asia.redact.bracket.properties.Env;
-import asia.redact.bracket.properties.Ref;
-import asia.redact.bracket.properties.Sugar;
+import asia.redact.bracket.properties.adapter.Env;
+import asia.redact.bracket.properties.adapter.Ref;
+import asia.redact.bracket.properties.adapter.Sugar;
 
 /**
  * general applicability to all the Properties implementation classes

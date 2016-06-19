@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import asia.redact.bracket.properties.adapter.Sugar;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;

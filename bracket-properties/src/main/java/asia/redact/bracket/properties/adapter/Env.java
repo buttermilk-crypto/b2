@@ -1,4 +1,4 @@
-package asia.redact.bracket.properties;
+package asia.redact.bracket.properties.adapter;
 
 import java.util.regex.Pattern;
 

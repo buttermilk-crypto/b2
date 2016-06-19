@@ -1,7 +1,6 @@
-package asia.redact.bracket.properties.impl;
+package asia.redact.bracket.properties.adapter;
 
 import asia.redact.bracket.properties.Properties;
-import asia.redact.bracket.properties.Ref;
 
 public class ReferenceAdapter implements Ref {
 

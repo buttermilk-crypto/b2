@@ -1,4 +1,4 @@
-package asia.redact.bracket.properties.impl;
+package asia.redact.bracket.properties.adapter;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 import asia.redact.bracket.properties.Properties;
-import asia.redact.bracket.properties.Sugar;
 
 /**
  * Syntactic sugar - convenience methods

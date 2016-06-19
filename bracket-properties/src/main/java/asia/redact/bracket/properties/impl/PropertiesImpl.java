@@ -11,7 +11,8 @@ import java.util.function.BiConsumer;
 
 import asia.redact.bracket.util.Obfuscate;
 import asia.redact.bracket.properties.Properties;
-import asia.redact.bracket.properties.Sugar;
+import asia.redact.bracket.properties.adapter.Sugar;
+import asia.redact.bracket.properties.adapter.SugarAdapter;
 import asia.redact.bracket.properties.values.BasicValueModel;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;

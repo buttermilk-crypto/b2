@@ -1,4 +1,4 @@
-package asia.redact.bracket.properties;
+package asia.redact.bracket.properties.adapter;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
