@@ -13,14 +13,13 @@ import java.util.List;
  * 
  * @author Dave
  * @see BasicValueModel
- * @see UnsettableValueModel
  */
 
 public interface ValueModel extends Serializable {
 
 	public char getSeparator();
 
-	public List<String> getComments();
+	public Comment getComments();
 
 	public List<String> getValues();
 
@@ -30,12 +29,5 @@ public interface ValueModel extends Serializable {
 	 */
 	public String getValue();
 	
-	/**
-	 * Output a reasonable representation of what the text for this key value pair would look like
-	 * 
-	 */
-	public String asKeyValueRep(String key);
-	
-	public ValueModel cloneImmutable();
 
 }

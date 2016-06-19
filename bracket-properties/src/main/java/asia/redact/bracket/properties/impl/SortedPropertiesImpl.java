@@ -15,11 +15,12 @@ public class SortedPropertiesImpl extends PropertiesImpl {
 	}
 
 	public SortedPropertiesImpl(Comparator<String> comparator) {
-		super();
+		init();
 		this.comparator = comparator;
 	}
 
-	protected void initMap() {
+	@Override
+	protected void init() {
 		if(comparator == null) {
 			map = new TreeMap<String,ValueModel>();
 		}else{

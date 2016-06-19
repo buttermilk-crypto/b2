@@ -1,9 +1,12 @@
 package asia.redact.bracket.properties.impl;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 
 import asia.redact.bracket.util.Obfuscate;
@@ -28,32 +31,36 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 	}
 
 	@Override
-	public String get(String key) {
-		return null;
+	public String get(String key){
+		lock.lock();
+		try {
+			ValueModel val = map.get(key);
+			if(val==null) throw new RuntimeException("Missing value "+key+". Normally you would test for the existence of keys by using containsKey(key) prior to using get() if there is doubt");
+			return val.getValue();
+		}finally{
+			lock.unlock();
+		}
 	}
 
 	@Override
 	public String get(String key, String defaultVal) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!map.containsKey(key)) return defaultVal;
+		else return get(key);
 	}
 
 	@Override
 	public List<String> getValues(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return map.get(key).getValues();
 	}
 
 	@Override
-	public List<String> getComments(String key) {
-		// TODO Auto-generated method stub
-		return null;
+	public Comment getComments(String key) {
+		return map.get(key).getComments();
 	}
 
 	@Override
 	public char getSeparator(String key) {
-		// TODO Auto-generated method stub
-		return 0;
+		return map.get(key).getSeparator();
 	}
 
 	@Override
@@ -62,33 +69,62 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 	}
 
 	@Override
-	public void put(String key, Comment comment, String... values) {
-		// TODO Auto-generated method stub
-
+	public void put(String key, Comment comment, String ... values){
+		lock.lock();
+		try {
+			if(!map.containsKey(key)){
+				map.put(key, new BasicValueModel(comment,values));
+			}else{
+				ValueModel val = map.get(key);
+			    if(val instanceof BasicValueModel){
+			    	((BasicValueModel)val).addComment(comment.comments);
+			    }
+				val.getValues().clear();
+				for(String s:values){
+					val.getValues().add(s);
+				}
+			}
+		}finally{
+			lock.unlock();
+		}
 	}
 
 	@Override
-	public void put(String key, char separator, Comment comment,
-			String... values) {
-		// TODO Auto-generated method stub
-
+	public void put(String key, char separator, Comment comment, String ... values){
+		lock.lock();
+		try {
+			if(!map.containsKey(key)){
+				map.put(key, new BasicValueModel(comment,separator,values));
+			}else{
+				ValueModel val = map.get(key);
+			    if(val instanceof BasicValueModel){
+			    	((BasicValueModel)val).addComment(comment.comments);
+			    	((BasicValueModel)val).setSeparator(separator);
+			    }
+				val.getValues().clear();
+				for(String s:values){
+					val.getValues().add(s);
+				}
+			}
+		}finally{
+			lock.unlock();
+		}
 	}
 
 	@Override
 	public void put(KeyValueModel model) {
-		// TODO Auto-generated method stub
-
+		put(model.getKey(),model);
 	}
 
 	@Override
 	public void put(String key, ValueModel model) {
-		// TODO Auto-generated method stub
-
+		map.put(key,model);
 	}
 
 	@Override
 	public boolean hasNonEmptyValue(String key) {
-		return false;
+		String val = get(key);
+		return val != null && (!val.trim().equals(""));
 	}
 
 	@Override
@@ -98,8 +134,14 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 
 	@Override
 	public Properties merge(Properties props) {
-		// TODO Auto-generated method stub
-		return null;
+		lock.lock();
+		try {
+			Map<String,ValueModel> his = props.asMap();
+			map.putAll(his);
+		}finally{
+			lock.unlock();
+		}
+		return this;
 	}
 
 	public void obfuscate(String key){
@@ -147,36 +189,59 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 		return new Obfuscate(password).decryptToChar(val,StandardCharsets.UTF_8);
 	}
 	
-	
-
 	@Override
-	public Properties slice(String keyBase) {
-		// TODO Auto-generated method stub
-		return null;
+	public Properties slice(String root){
+		PropertiesImpl impl = new PropertiesImpl();
+		for(String key : map.keySet()){
+			if(key.startsWith(root)){
+				ValueModel value = map.get(key);
+				impl.put(key, value);
+			}
+		}
+		return impl;
 	}
 
 	@Override
 	public Map<String, ValueModel> asMap() {
-		// TODO Auto-generated method stub
-		return null;
+		return map;
 	}
 
 	@Override
 	public Map<String, String> asFlattenedMap() {
-		// TODO Auto-generated method stub
-		return null;
+		lock.lock();
+		try{
+		LinkedHashMap<String,String> out = new LinkedHashMap<String,String>();
+		Iterator<String> iter = map.keySet().iterator();
+		while(iter.hasNext()){
+			String key = iter.next();
+			String value = map.get(key).getValue();
+			out.put(key, value);
+		}
+		return out;
+		}finally{
+			lock.unlock();
+		}
 	}
 
 	@Override
 	public List<KeyValueModel> asList() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<KeyValueModel> list = new ArrayList<>();
+		for(Entry<String, ValueModel> e: map.entrySet()) {
+			list.add(new asia.redact.bracket.properties.values.Entry(e.getKey(), e.getValue().getSeparator(), e.getValue().getComments(), e.getValue().getValues()));
+		}
+		return list;
 	}
 
 	@Override
 	public java.util.Properties asLegacy() {
-		// TODO Auto-generated method stub
-		return null;
+		java.util.Properties legacy = new java.util.Properties();
+		Iterator<String> iter = map.keySet().iterator();
+		while(iter.hasNext()) {
+			String key = iter.next();
+			String value = get(key);
+			legacy.put(key, value);
+		}
+		return legacy;
 	}
 
 	@Override

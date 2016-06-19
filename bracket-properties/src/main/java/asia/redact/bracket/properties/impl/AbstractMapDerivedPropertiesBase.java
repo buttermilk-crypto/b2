@@ -8,14 +8,12 @@ package asia.redact.bracket.properties.impl;
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 
-import asia.redact.bracket.properties.values.Entry;
 import asia.redact.bracket.properties.values.ValueModel;
 
 /**
- * Implemented here in the base are the map-like facade methods.
+ * Base class for Map-derived Implementations. In this class we implement the common map-like facade methods.
  * 
  * @author Dave
  *
@@ -28,33 +26,13 @@ public abstract class AbstractMapDerivedPropertiesBase extends PropertiesBaseImp
 	protected AbstractMap<String, ValueModel> map;
 
 	public AbstractMapDerivedPropertiesBase() {
-		super();
+		init();
 	}
 	
+	/**
+	 * Initialize the map
+	 */
 	abstract void init();
-
-	public Entry atIndex(int index) {
-		lock.lock();
-		try {
-			if (index > this.size())
-				throw new RuntimeException("Out of bounds: " + index);
-			Iterator<String> iter = map.keySet().iterator();
-			int count = 0;
-			while (iter.hasNext()) {
-				if (index < count) {
-					iter.next();
-					count++;
-					continue;
-				}
-			}
-
-			String key = iter.next();
-			ValueModel model = map.get(key);
-			return new Entry(key, model.getComments(), model.getValues());
-		} finally {
-			lock.unlock();
-		}
-	}
 
 	public int size() {
 		lock.lock();

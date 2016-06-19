@@ -7,6 +7,8 @@ package asia.redact.bracket.properties.io;
 
 import java.util.List;
 
+import asia.redact.bracket.properties.values.Comment;
+
 /**
  * You can implement custom output formats using this interface and OutputAdapter.writeTo(Writer, OutputFormat);
  * 
@@ -18,7 +20,7 @@ public interface OutputFormat {
 
 	public String formatContentType();
 	public String formatHeader();
-	public String format(String key, char separator, List<String> values, List<String> comments);
+	public String format(String key, char separator, List<String> values, Comment comments);
 	public String formatFooter();
 	
 }

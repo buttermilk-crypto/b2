@@ -15,7 +15,7 @@ public interface Properties {
 	public String get(String key);
 	public String get(String key, String defaultVal);
 	public List<String> getValues(String key); // for multi-line get the values
-	public List<String> getComments(String key); // full comment including # or !
+	public Comment getComments(String key); // full comment including # or !
 	public char getSeparator(String key);
 	public ValueModel getValueModel(String key);
 	

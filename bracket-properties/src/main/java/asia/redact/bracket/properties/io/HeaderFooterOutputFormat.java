@@ -8,6 +8,8 @@ package asia.redact.bracket.properties.io;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import asia.redact.bracket.properties.values.Comment;
+
 /**
  * Default formatting for properties output. You can implement your own if you don't like this one 
  * or it doesn't do what you require.
@@ -36,15 +38,12 @@ public class HeaderFooterOutputFormat implements OutputFormat {
 		return buf.toString();
 	}
 	
-	public String format(String key, char separator, List<String> values, List<String> comments) {
+	public String format(String key, char separator, List<String> values, Comment comments) {
 		
 		if(key == null) throw new RuntimeException("Key cannot be null in a format");
 		StringBuffer buf = new StringBuffer();
 		if(comments != null && comments.size()>0) {
-			for(String c: comments){
-				buf.append(c);
-				buf.append(lineSeparator);
-			}
+			buf.append(comments.comments);
 		}
 	    StringBuilder keyBuilder=new StringBuilder();
 	    for(int i=0;i<key.length();i++){

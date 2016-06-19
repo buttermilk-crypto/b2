@@ -10,16 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Representation of properties values.</p>
- * 
- * <p>We consider comments above the key/value pair to be a part of the value. This is not really correct,
- * and they should probably be associated with the key, but it generally works because there is a one to many 
- * relation between a key/value pair and a set of comments. It is also nice to keep a key as a simple 
- * String data type.</p>
- * 
- * <p>Only comments above the key/value pair are considered part of the comment set. This is an arbitrary determination,
- * but it places a very light burden on a programmer and it seems a reasonable convention. It means comments at the end 
- * of a file (past any key) may potentially be discarded.</p>
+ * <p>Representation of a property value.</p>
  * 
  * @author Dave
  *
@@ -28,12 +19,12 @@ public class BasicValueModel implements ValueModel {
 
 	private static final long serialVersionUID = 1L;
 	final static String lineSeparator = System.getProperty("line.separator");
-	protected final List<String> comments;
+	protected final Comment comments;
 	protected final List<String> values;
 	protected char separator = '=';
 	
 	public BasicValueModel() {
-		comments = new ArrayList<String>();
+		comments = new Comment();
 		values = new ArrayList<String>();
 	}
 	
@@ -52,28 +43,27 @@ public class BasicValueModel implements ValueModel {
 		}
 	}
 	
-	public BasicValueModel(Comment comment,String... value) {
-		this();
-		comments.add(comment.comment);
-		for(String v: value){
-			values.add(v);
-		}
-	}
-	
-	public BasicValueModel(Comment comment, char sep, String... value) {
-		this();
-		this.separator=sep;
-		comments.add(comment.comment);
-		for(String v: value){
-			values.add(v);
-		}
-	}
-	
-	
-    BasicValueModel(List<String> comments, List<String> values) {
+    public BasicValueModel(Comment comments, List<String> values) {
 		this.comments = comments;
 		this.values = values;
 	}
+    
+    public BasicValueModel(Comment comments, String [] values) {
+ 		this.comments = comments;
+ 		this.values = new ArrayList<String>();
+ 		for(String v: values){
+ 			this.values.add(v);
+ 		}
+ 	}
+    
+    public BasicValueModel(Comment comments, char sep, String [] values) {
+    	this.separator = sep;
+  		this.comments = comments;
+  		this.values = new ArrayList<String>();
+  		for(String v: values){
+  			this.values.add(v);
+  		}
+  	}
 
 	@Override
 	public synchronized int hashCode() {
@@ -118,7 +108,7 @@ public class BasicValueModel implements ValueModel {
 		this.separator = separator;
 	}
 
-	public List<String> getComments() {
+	public Comment getComments() {
 		return comments;
 	}
 
@@ -134,8 +124,8 @@ public class BasicValueModel implements ValueModel {
 		this.values.addAll(values);
 	}
 	
-	public void addComment(String comment){
-		comments.add(comment);
+	public void addComment(String line){
+		comments.addLine(line);
 	}
 	
 	public void addComments(List<String> comments){
@@ -158,41 +148,6 @@ public class BasicValueModel implements ValueModel {
 	
 	public String toString(){
 		return getValue();
-	}
-	
-	public String asKeyValueRep(String key){
-		StringBuffer buf = new StringBuffer();
-		if(comments.size() > 0){
-			for(String com: comments){
-				buf.append(com);
-				buf.append(lineSeparator);
-			}
-		}
-		buf.append(key);
-		buf.append(separator);
-		int count = 0;
-		if(values.size() == 0){
-			// output nothing
-		}else if(values.size() == 1){
-			for(String val: values){
-				buf.append(val);
-				buf.append(lineSeparator);
-		
-			}
-		}else {
-			for(String val: values){
-				buf.append(val);
-			    if(count<values.size()-1) buf.append("\\");
-				buf.append(lineSeparator);
-				count++;
-			}
-		}
-		
-		return buf.toString();
-	}
-	
-	public ValueModel cloneImmutable() {
-		return new ImmutableValueModel(comments, separator, values);
 	}
 	
 }

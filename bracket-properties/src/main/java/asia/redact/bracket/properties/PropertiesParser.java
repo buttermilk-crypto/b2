@@ -5,7 +5,10 @@
  */
 package asia.redact.bracket.properties;
 
+import java.util.Comparator;
+
 import asia.redact.bracket.properties.impl.PropertiesImpl;
+import asia.redact.bracket.properties.impl.SortedPropertiesImpl;
 import asia.redact.bracket.properties.line.Line;
 import asia.redact.bracket.properties.line.LineScanner;
 import asia.redact.bracket.properties.values.BasicValueModel;
@@ -13,29 +16,26 @@ import asia.redact.bracket.properties.values.BasicValueModel;
 public class PropertiesParser {
 
 	final LineScanner scanner;
-	final Properties props;
-	ModelType modelType;
+	Properties props;
 
-	/**
-	 * Defaults to PropertiesImpl
-	 * @param scanner
-	 */
 	public PropertiesParser(LineScanner scanner) {
 		this.scanner = scanner;
-		props = new PropertiesImpl();
 	}
-
+	
 	/**
-	 * Use this constructor to load the SortedPropertiesImpl or ImmutablePropertiesImpl. 
-	 * @param scanner
-	 * @param propsInstance
+	 * populates a SortedPropertiesImpl
+	 * 
+	 * @param comparator
+	 * @return
 	 */
-	public PropertiesParser(LineScanner scanner, Properties propsInstance) {
-		this.scanner = scanner;
-		props = propsInstance;
+	public PropertiesParser parse(Comparator<String> comparator) {
+		props = new SortedPropertiesImpl(comparator);
+		return parse();
 	}
 
-	public void parse() {
+	public PropertiesParser parse() {
+		
+		if(props == null) props = new PropertiesImpl();
 
 		Line line = null;
 		String key = null;
@@ -85,18 +85,19 @@ public class PropertiesParser {
 		if (key != null) {
 			props.put(key, model);
 		}
+		
+		return this;
+	}
+	
+	public PropertiesParser parseImmutable() {
+		
+		
+
+		return this;
 	}
 
 	public Properties getProperties() {
 		return props;
-	}
-	
-	public enum ModelType {
-		Basic, Unsettable, Immutable, Entry;
-	}
-
-	public void setModelType(ModelType modelType) {
-		this.modelType = modelType;
 	}
 
 }

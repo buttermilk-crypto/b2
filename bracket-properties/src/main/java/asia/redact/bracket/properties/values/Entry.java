@@ -2,44 +2,49 @@ package asia.redact.bracket.properties.values;
 
 import java.util.List;
 
-public class Entry extends BasicValueModel implements KeyValueModel {
+public class Entry implements KeyValueModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	String key;
+	private String key;
+	private Comment comment;
+	private List<String> values;
+	private char separator;
 
-	public Entry() {
+	public Entry(String key, char separator, Comment comment, List<String> values) {
 		super();
+		this.key = key;
+		this.comment = comment;
+		this.values = values;
+		this.separator = separator;
 	}
 
-	public Entry(String key, String... value) {
-		super(value);
-		this.key = key;
+	@Override
+	public char getSeparator() {
+		return separator;
 	}
 
-	public Entry(String key, char sep, String... value) {
-		super(sep, value);
-		this.key = key;
+	@Override
+	public Comment getComments() {
+		return comment;
 	}
 
-	public Entry(String key, Comment comment, String... value) {
-		super(comment, value);
-		this.key = key;
+	@Override
+	public List<String> getValues() {
+		return values;
 	}
 
-	public Entry(String key, Comment comment, char sep, String... value) {
-		super(comment, sep, value);
-		this.key = key;
-	}
-
-	public Entry(String key, List<String> comments, List<String> values) {
-		super(comments, values);
-		this.key = key;
+	@Override
+	public String getValue() {
+		StringBuffer buf = new StringBuffer();
+		for(String v: values){
+			buf.append(v);
+		}
+		return buf.toString();
 	}
 
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
 		return key;
 	}
 
