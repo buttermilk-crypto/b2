@@ -17,25 +17,43 @@ public class PropertiesParser {
 
 	final LineScanner scanner;
 	Properties props;
+	boolean concurrent;
 
 	public PropertiesParser(LineScanner scanner) {
 		this.scanner = scanner;
+		this.concurrent = false;
+	}
+	
+	public PropertiesParser(LineScanner scanner, boolean concurrent) {
+		this.scanner = scanner;
+		this.concurrent = concurrent;
+	}
+	
+	public void setConcurrent(boolean concurrent) {
+		this.concurrent = concurrent;
 	}
 	
 	/**
-	 * populates a SortedPropertiesImpl
+	 * populates a SortedPropertiesImpl (which only makes sense if you need other than insert-order ordering)
 	 * 
 	 * @param comparator
 	 * @return
 	 */
 	public PropertiesParser parse(Comparator<String> comparator) {
-		props = new SortedPropertiesImpl(comparator);
+		
+		props = new SortedPropertiesImpl(concurrent, comparator).init();
+		
 		return parse();
 	}
 
+	/**
+	 * populates a PropertiesImpl object
+	 * 
+	 * @return
+	 */
 	public PropertiesParser parse() {
 		
-		if(props == null) props = new PropertiesImpl();
+		if(props == null) props = new PropertiesImpl(concurrent).init();
 
 		Line line = null;
 		String key = null;
@@ -88,16 +106,8 @@ public class PropertiesParser {
 		
 		return this;
 	}
-	
-	public PropertiesParser parseImmutable() {
-		
-		
-
-		return this;
-	}
 
 	public Properties getProperties() {
 		return props;
 	}
-
 }

@@ -16,7 +16,7 @@ import asia.redact.bracket.properties.values.ValueModel;
 /**
  * Joins an OutputFormatter with a file to output. RandomAccessFiles can handle 
  * file locking semantics for example if the data is being written to a file share 
- * (shared file system)
+ * (shared file system) by multiple app instances we can lock the file while we write it.
  *  
  * @author Dave
  *

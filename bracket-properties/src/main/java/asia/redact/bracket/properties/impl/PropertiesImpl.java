@@ -2,6 +2,7 @@ package asia.redact.bracket.properties.impl;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,25 +27,25 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 
 	private static final long serialVersionUID = 1L;
 
-	public PropertiesImpl() {
-		super();
+	public PropertiesImpl(boolean concurrent) {
+		super(concurrent);
 	}
 	
 	@Override
-	void init() {
-		map = new LinkedHashMap<String,ValueModel>();
+	public Properties init() {
+		if(concurrent) {
+			map = Collections.synchronizedMap(new LinkedHashMap<String,ValueModel>());
+		}else{
+			map = new LinkedHashMap<String,ValueModel>();
+		}
+		return this;
 	}
 
 	@Override
 	public String get(String key){
-		lock.lock();
-		try {
 			ValueModel val = map.get(key);
 			if(val==null) throw new RuntimeException("Missing value "+key+". Normally you would test for the existence of keys by using containsKey(key) prior to using get() if there is doubt");
 			return val.getValue();
-		}finally{
-			lock.unlock();
-		}
 	}
 
 	@Override
@@ -75,8 +76,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 
 	@Override
 	public void put(String key, Comment comment, String ... values){
-		lock.lock();
-		try {
+		
 			if(!map.containsKey(key)){
 				map.put(key, new BasicValueModel(comment,values));
 			}else{
@@ -89,15 +89,11 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 					val.getValues().add(s);
 				}
 			}
-		}finally{
-			lock.unlock();
-		}
 	}
 
 	@Override
 	public void put(String key, char separator, Comment comment, String ... values){
-		lock.lock();
-		try {
+		
 			if(!map.containsKey(key)){
 				map.put(key, new BasicValueModel(comment,separator,values));
 			}else{
@@ -111,9 +107,6 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 					val.getValues().add(s);
 				}
 			}
-		}finally{
-			lock.unlock();
-		}
 	}
 
 	@Override
@@ -139,13 +132,10 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 
 	@Override
 	public Properties merge(Properties props) {
-		lock.lock();
-		try {
+		
 			Map<String,ValueModel> his = props.asMap();
 			map.putAll(his);
-		}finally{
-			lock.unlock();
-		}
+		
 		return this;
 	}
 
@@ -196,7 +186,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 	
 	@Override
 	public Properties slice(String root){
-		PropertiesImpl impl = new PropertiesImpl();
+		PropertiesImpl impl = new PropertiesImpl(false);
 		for(String key : map.keySet()){
 			if(key.startsWith(root)){
 				ValueModel value = map.get(key);
@@ -213,8 +203,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 
 	@Override
 	public Map<String, String> asFlattenedMap() {
-		lock.lock();
-		try{
+		
 		LinkedHashMap<String,String> out = new LinkedHashMap<String,String>();
 		Iterator<String> iter = map.keySet().iterator();
 		while(iter.hasNext()){
@@ -223,9 +212,6 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 			out.put(key, value);
 		}
 		return out;
-		}finally{
-			lock.unlock();
-		}
 	}
 
 	@Override
@@ -274,8 +260,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 
 	@Override
 	public void put(String key, String ... values){
-		lock.lock();
-		try {
+		
 			if(!map.containsKey(key)){
 				map.put(key, new BasicValueModel(values));
 			}else{
@@ -285,9 +270,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements 
 					val.getValues().add(s);
 				}
 			}
-		}finally{
-			lock.unlock();
-		}
+		
 	}
 	
 	

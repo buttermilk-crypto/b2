@@ -5,6 +5,7 @@
  */
 package asia.redact.bracket.properties.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -137,6 +139,18 @@ public class OutputAdapter {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static final String toXML(Properties props){
+		java.util.Properties p = props.asLegacy();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			p.storeToXML(out, "");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return new String(out.toByteArray(), StandardCharsets.UTF_8);
 	}
 
 }

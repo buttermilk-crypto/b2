@@ -6,10 +6,11 @@
 package asia.redact.bracket.properties.impl;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
+import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.properties.values.ValueModel;
 
 /**
@@ -23,96 +24,52 @@ public abstract class AbstractMapDerivedPropertiesBase extends PropertiesBaseImp
 	private static final long serialVersionUID = 1L;
 
 	// the data
-	protected AbstractMap<String, ValueModel> map;
+	protected Map<String, ValueModel> map;
+	protected boolean concurrent;
 
-	public AbstractMapDerivedPropertiesBase() {
-		init();
+	public AbstractMapDerivedPropertiesBase(boolean concurrent) {
+		this.concurrent = concurrent;
 	}
 	
 	/**
 	 * Initialize the map
 	 */
-	abstract void init();
+	public abstract Properties init();
 
 	public int size() {
-		lock.lock();
-		try {
-			return map.size();
-		} finally {
-			lock.unlock();
-		}
+		return map.size();
 	}
 
 	public boolean isEmpty() {
-		lock.lock();
-		try {
-			return map.isEmpty();
-		} finally {
-			lock.unlock();
-		}
+		return map.isEmpty();
 	}
 
 	public boolean containsKey(String key) {
-		lock.lock();
-		try {
-			return map.containsKey(key);
-		} finally {
-			lock.unlock();
-		}
+		return map.containsKey(key);
 	}
 
 	public boolean containsValue(String value) {
-		lock.lock();
-		try {
-			return map.containsValue(value);
-		} finally {
-			lock.unlock();
-		}
+		return map.containsValue(value);
 	}
 
 	public Object remove(String key) {
-		lock.lock();
-		try {
-			return map.remove(key);
-		} finally {
-			lock.unlock();
-		}
+		return map.remove(key);
 	}
 
 	public void clear() {
-		lock.lock();
-		try {
-			map.clear();
-		} finally {
-			lock.unlock();
-		}
+		map.clear();
 	}
 
 	public Set<String> keySet() {
-		lock.lock();
-		try {
-			return map.keySet();
-		} finally {
-			lock.unlock();
-		}
+		return map.keySet();
 	}
 
 	public Collection<ValueModel> values() {
-		lock.lock();
-		try {
-			return map.values();
-		} finally {
-			lock.unlock();
-		}
+		return map.values();
 	}
 
 	public String toString() {
-		lock.lock();
-		try {
-			return map.toString();
-		} finally {
-			lock.unlock();
-		}
+		return map.toString();
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class LoadList {
 
 	public LoadList() {
 		list = new ArrayList<PropertiesReference>();
-		props = new PropertiesImpl();
+		props = new PropertiesImpl(false).init();
 	}
 
 	/**

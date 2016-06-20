@@ -1,31 +1,37 @@
 package asia.redact.bracket.properties.impl;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeMap;
 
-import asia.redact.bracket.properties.values.ValueModel;
+import asia.redact.bracket.properties.Properties;
 
 public class SortedPropertiesImpl extends PropertiesImpl {
 
 	private static final long serialVersionUID = 1L;
 	private Comparator<String> comparator;
 
-	public SortedPropertiesImpl() {
-		super();
-	}
-
-	public SortedPropertiesImpl(Comparator<String> comparator) {
-		init();
+	public SortedPropertiesImpl(boolean concurrent, Comparator<String> comparator) {
+		super(concurrent);
 		this.comparator = comparator;
 	}
 
 	@Override
-	protected void init() {
+	public Properties init() {
 		if(comparator == null) {
-			map = new TreeMap<String,ValueModel>();
+			if(concurrent) {
+				map = Collections.synchronizedMap(new TreeMap<>());
+			}else{
+				map = new TreeMap<>();
+			}
 		}else{
-			map = new TreeMap<String,ValueModel>(comparator);
+			if(concurrent) {
+				map = Collections.synchronizedMap(new TreeMap<>(comparator));
+			}else{
+				map = new TreeMap<>(comparator);
+			}
 		}
+		return this;
 	}
 
 
