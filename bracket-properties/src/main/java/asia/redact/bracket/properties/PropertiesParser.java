@@ -34,7 +34,7 @@ public class PropertiesParser {
 	}
 	
 	/**
-	 * populates a SortedPropertiesImpl (which only makes sense if you need other than insert-order ordering)
+	 * populates a SortedPropertiesImpl (which only makes sense if you need something other than insert-order ordering)
 	 * 
 	 * @param comparator
 	 * @return
@@ -47,7 +47,8 @@ public class PropertiesParser {
 	}
 
 	/**
-	 * populates a PropertiesImpl object
+	 * populates a PropertiesImpl object. If you have previously set concurrent to true, the
+	 * result will be wrapped in a Concurrent wrapper
 	 * 
 	 * @return
 	 */

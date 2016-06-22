@@ -3,11 +3,13 @@
  *  Copyright 2011-2016 David R. Smith, All Rights Reserved
  *
  */
-package asia.redact.bracket.properties.mgmt;
+package asia.redact.bracket.properties.ref;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 
@@ -34,11 +36,6 @@ import java.io.Serializable;
  * ReferenceType.COMMANDLINE_OVERRIDE in which case data is the name of a property to be searched for from the command line 
  * </td>
  * </tr>
- *  <tr>
- * <td>
- * ReferenceType.OBFUSCATED - ALL the properties in the file will be deobfuscated. 
- * </td>
- * </tr>
  * </table>
  * 
  * @author Dave
@@ -50,17 +47,31 @@ public class PropertiesReference implements Serializable {
 	
 	public final ReferenceType type;
 	public final String data;
+	public final Charset charset;
 	
-	
+	/**
+	 * Assume UTF-8 as a default
+	 * @param type
+	 * @param data
+	 */
 	public PropertiesReference(ReferenceType type, String data) {
 		super();
 		this.type = type;
 		this.data = data;
+		this.charset = StandardCharsets.UTF_8;
 	}
 	
-	public PropertiesReference(ReferenceType type, File data) {
+	public PropertiesReference(ReferenceType type, String data, Charset charset) {
 		super();
 		this.type = type;
+		this.data = data;
+		this.charset = charset;
+	}
+	
+	public PropertiesReference(File data, Charset charset) {
+		super();
+		this.type = ReferenceType.EXTERNAL;
+		this.charset = charset;
 		try {
 			this.data = data.getCanonicalPath();
 		} catch (IOException e) {

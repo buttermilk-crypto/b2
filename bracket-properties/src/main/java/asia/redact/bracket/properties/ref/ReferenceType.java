@@ -3,7 +3,7 @@
  *  Copyright 2011-2016 David R. Smith, All Rights Reserved
  *
  */
-package asia.redact.bracket.properties.mgmt;
+package asia.redact.bracket.properties.ref;
 
 /**
  * <table>
@@ -17,5 +17,8 @@ package asia.redact.bracket.properties.mgmt;
  *
  */
 public enum ReferenceType {
-		EXTERNAL,CLASSLOADED,DIRECT,COMMANDLINE_OVERRIDE,OBFUSCATED;
+		EXTERNAL,
+		CLASSLOADED,
+		DIRECT,
+		COMMANDLINE_OVERRIDE;
 }

@@ -42,18 +42,13 @@ public class OutputAdapter {
 	 */
 	public void writeTo(OutputStream out, OutputFormat format, Charset charset) {
 		
-		try {
+		try (
 			OutputStreamWriter writer = new OutputStreamWriter(out,charset);
+		){
 			writeTo(writer, format);
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally {
-			if(out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {}
-			}
 		}
 	}
 	
@@ -62,20 +57,15 @@ public class OutputAdapter {
 	 * 
 	 */
 	public void writeTo(File file, OutputFormat format, Charset charset) {
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(file);
+	
+		try (
+			FileOutputStream out = new FileOutputStream(file);
 			OutputStreamWriter writer = new OutputStreamWriter(out,charset);
+		){
 			writeTo(writer, format);
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally {
-			if(out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {}
-			}
 		}
 	}
 	
@@ -141,6 +131,12 @@ public class OutputAdapter {
 		}
 	}
 	
+	/**
+	 * Just leverage the legacy XML DTD. 
+	 * 
+	 * @param props
+	 * @return
+	 */
 	public static final String toXML(Properties props){
 		java.util.Properties p = props.asLegacy();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
