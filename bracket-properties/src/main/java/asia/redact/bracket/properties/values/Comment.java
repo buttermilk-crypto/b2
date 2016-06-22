@@ -11,7 +11,8 @@ import java.util.List;
 import asia.redact.bracket.properties.io.OutputFormat;
 
 /**
- * Strong typing for comments - helps with structure
+ * Strong typing for comments. Comment is a string consisting 
+ * of lines, the #  or ! is retained and added if not found
  *  
  * @author Dave
  *
@@ -30,7 +31,7 @@ public class Comment implements Iterable<String> {
 	 * @param comments
 	 */
 	public Comment(String line) {
-		if(!line.trim().startsWith("#")){
+		if(!(line.trim().startsWith("#") || line.trim().startsWith("!"))){
 			line += "# "+line;
 		}
 		this.comments=line;
@@ -38,7 +39,7 @@ public class Comment implements Iterable<String> {
 	
 	public Comment addLine(String line) {
 		StringBuffer buf = new StringBuffer(comments);
-		if(buf.length()>0)buf.append(OutputFormat.lineSeparator);
+		if(buf.length()>0) buf.append(OutputFormat.lineSeparator);
 		if(!(line.trim().startsWith("#") || line.trim().startsWith("!"))){
 			buf.append("# ");
 		}
@@ -61,6 +62,7 @@ public class Comment implements Iterable<String> {
 	public void clear() {
 		comments = "";
 	}
+	
 	public void addAll(List<String> list){
 		for(String line: list){
 			this.addLine(line);

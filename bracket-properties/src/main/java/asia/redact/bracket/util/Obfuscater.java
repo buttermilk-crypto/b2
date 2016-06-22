@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
  * @author Dave
  *
  */
-public final class Obfuscate {
+public final class Obfuscater {
 	
 	final byte [] salt = {0x23,0x42,0x10,0x37,0x08,0x77,0x55,0x19};
 	final char [] defaultPassword = {'t','g','A','6','Q','u','/', 'g','1','8','y','G',
@@ -41,12 +41,12 @@ public final class Obfuscate {
 	
 	final char[] password;
 	
-	public Obfuscate(char[] password) {
+	public Obfuscater(char[] password) {
 		super();
 		this.password = password;
 	}
 	
-	public Obfuscate(){
+	public Obfuscater(){
 		password = defaultPassword;
 	}
 
@@ -202,7 +202,7 @@ public final class Obfuscate {
 			return;
 		}
 		
-		Obfuscate o = new Obfuscate();
+		Obfuscater o = new Obfuscater();
 		for(String in: args){
 			String s = o.encrypt(in);
 			System.out.println(s);

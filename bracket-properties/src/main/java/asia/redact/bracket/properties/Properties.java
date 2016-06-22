@@ -13,7 +13,7 @@ import asia.redact.bracket.properties.values.ValueModel;
 
 public interface Properties {
 
-	// accessors
+	//basic accessors
 	
 	public String get(String key);
 	public String get(String key, String defaultVal);
@@ -23,25 +23,13 @@ public interface Properties {
 	public ValueModel getValueModel(String key);
 	
 	public void put(String key, String ... values);
-	
-	// access to the syntatic sugar adapter
-	public Sugar sugar();
-	
-	// access to the env templating adapter
-	public Env env();
-	
-	// access to the reference adapter
-	public Ref ref();
-	
-	// Java 8
-	public void forEach(BiConsumer<String,ValueModel> action);
-	
-	// programmatic construction
 	public void put(String key, Comment comment, String ... values);
 	public void put(String key, char separator, Comment comment, String ... values);
 	public void put(KeyValueModel model);
 	public void put(String key, ValueModel model);
 	
+	// Java 8
+	public void forEach(BiConsumer<String,ValueModel> action);
 	
 	// tests
 	public boolean containsKey(String key); // return true of the key exists
@@ -52,16 +40,6 @@ public interface Properties {
 	public void clear();
 	public void deleteKey(String key);
 	public Properties merge(Properties props);
-	
-	// obfuscation
-	public void obfuscate(String key);
-	public void deobfuscate(String key);
-	public char[] deobfuscateToChar(String key);
-	
-	// for additional security you can supply a password, but it must be available for deobfuscate as well
-	public void obfuscate(char[]password, String key);
-	public void deobfuscate(char[]password, String key);
-	public char[] deobfuscateToChar(char[]password,String key);
 	
 	public Properties slice(String keyBase);
 	

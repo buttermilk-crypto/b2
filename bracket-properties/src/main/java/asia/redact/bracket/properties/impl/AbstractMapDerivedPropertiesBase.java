@@ -19,12 +19,14 @@ import asia.redact.bracket.properties.values.ValueModel;
  * @author Dave
  *
  */
-public abstract class AbstractMapDerivedPropertiesBase extends PropertiesBaseImpl implements Serializable {
+public abstract class AbstractMapDerivedPropertiesBase implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	// the data
 	protected Map<String, ValueModel> map;
+	
+	// if set we will initialize a Concurrent map wrapper
 	protected boolean concurrent;
 
 	public AbstractMapDerivedPropertiesBase(boolean concurrent) {

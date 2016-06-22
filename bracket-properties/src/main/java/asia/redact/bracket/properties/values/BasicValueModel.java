@@ -35,7 +35,7 @@ public class BasicValueModel implements ValueModel {
 		}
 	}
 	
-	public BasicValueModel(char sep,String... value) {
+	public BasicValueModel(char sep, String... value) {
 		this();
 		this.separator=sep;
 		for(String v: value){

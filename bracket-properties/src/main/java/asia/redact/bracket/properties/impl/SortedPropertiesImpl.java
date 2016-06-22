@@ -1,14 +1,16 @@
 package asia.redact.bracket.properties.impl;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeMap;
 
 import asia.redact.bracket.properties.Properties;
 
-public class SortedPropertiesImpl extends PropertiesImpl {
+public class SortedPropertiesImpl extends PropertiesImpl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Comparator<String> comparator;
 
 	public SortedPropertiesImpl(boolean concurrent, Comparator<String> comparator) {
