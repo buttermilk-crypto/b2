@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import asia.redact.bracket.properties.adapter.Env;
-import asia.redact.bracket.properties.adapter.Ref;
+import asia.redact.bracket.properties.adapter.Alias;
 import asia.redact.bracket.properties.adapter.Sugar;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;

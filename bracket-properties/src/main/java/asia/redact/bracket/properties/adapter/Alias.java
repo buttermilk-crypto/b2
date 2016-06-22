@@ -1,6 +1,6 @@
 package asia.redact.bracket.properties.adapter;
 
-public interface Ref {
+public interface Alias {
 	
 	static final String REF_TOKEN = "_$";
 	

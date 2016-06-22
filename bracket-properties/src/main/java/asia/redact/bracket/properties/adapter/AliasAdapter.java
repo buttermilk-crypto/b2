@@ -8,11 +8,11 @@ import asia.redact.bracket.properties.Properties;
  * @author Dave
  *
  */
-public class ReferenceAdapter implements Ref {
+public class AliasAdapter implements Alias {
 
 	Properties props;
 	
-	public ReferenceAdapter(Properties props) {
+	public AliasAdapter(Properties props) {
 		this.props = props;
 	}
 	
