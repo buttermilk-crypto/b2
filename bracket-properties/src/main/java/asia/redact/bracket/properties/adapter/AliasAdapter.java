@@ -3,7 +3,8 @@ package asia.redact.bracket.properties.adapter;
 import asia.redact.bracket.properties.Properties;
 
 /**
- * Implement a reference scheme (aliasing) for keys within a properties file set
+ * Implement a reference scheme (aliasing) for keys within a properties file set.
+ * This allows the same value to have more than one key. 
  * 
  * @author Dave
  *

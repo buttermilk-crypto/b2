@@ -99,6 +99,7 @@ public class Line implements Serializable {
 	
 	public String logicalLineContents(){
 		
+		// count any initial whitespace on continuation line
 		int countBlank = 0;
 		for(int i =0;i<text.length();i++){
 			if(Character.isWhitespace(text.charAt(i))){
@@ -109,6 +110,7 @@ public class Line implements Serializable {
 			}
 		}
 		
+		// removes initial whitespace on the continuation as per spec
 		if(hasContinuation()){
 			if(countBlank>0) {
 				return text.substring(countBlank,text.length()-1);
@@ -116,11 +118,20 @@ public class Line implements Serializable {
 				return text.substring(0, text.length()-1);
 			}
 		}else{
-			if(countBlank>0) {
-				return text.substring(countBlank,text.length());
-			}else {
-				return text.substring(0, text.length());
+			// if end of logical lines, check for trailing whitespace and trim it
+			
+			int countTrailingBlank = 0;
+			for(int i=text.length()-1;i>0;i--){
+				if(Character.isWhitespace(text.charAt(i))){
+					countTrailingBlank++;
+					continue;
+				}else{
+					break;
+				}
 			}
+			
+			return text.substring(countBlank,text.length()-countTrailingBlank);
+			
 		}
 	}
 	
@@ -177,6 +188,8 @@ public class Line implements Serializable {
 	
 	public String [] naturalLineContents(){
 		String [] retVals = new String[3];
+		
+		// initial whitespace
 		int countBlank = 0;
 		for(int i =0;i<text.length();i++){
 			if(Character.isWhitespace(text.charAt(i))){
@@ -232,16 +245,29 @@ public class Line implements Serializable {
 		}
 		
 		// Issue #1 - check for end of key white space and if found, trim it
-		if(retVals[0].endsWith(" ")){
+		if(retVals[0].endsWith(" ") || retVals[0].endsWith("\t")){
 			retVals[0] = retVals[0].trim();
 			
 		}
 		
 		retVals[1]=String.valueOf(line.charAt(sepIndex));
 		if(hasContinuation()){
-			retVals[2]=line.substring(sepIndex+1,line.length()-1);
+			
+			// first look for whitespace at start of value
+			// start at sepIndex
+			countBlank = 0;
+			for(int i=sepIndex+1; i<text.length(); i++){
+				if(Character.isWhitespace(text.charAt(i))){
+					countBlank++;
+					continue;
+				}else{
+					break;
+				}
+			}
+			retVals[2]=line.substring(sepIndex+1+countBlank,line.length()-1);
 		}else{
-			retVals[2]=line.substring(sepIndex+1);
+			// if no continuation, trim end whitespace if there is any
+			retVals[2]=line.substring(sepIndex+1).trim();
 		}
 		
 		return retVals;

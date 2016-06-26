@@ -34,13 +34,13 @@ public class RefTest {
 			
 			PropertiesReference externalRef = new PropertiesReference(tmpExternal, StandardCharsets.UTF_8);
 			PropertiesReference classpathRef = new PropertiesReference(ReferenceType.CLASSLOADED, "/crlf/test.properties");
-			LoadList list = new LoadList();
-			list.addReference(externalRef)
-				.addReference(classpathRef);
-			
-			Properties result = list.load().getProps();
-			Assert.assertEquals(6,result.size()); // override must have occured
-			Assert.assertEquals("This value", result.get("item0"));
+			Properties result = new LoadList()
+				.addReference(externalRef)
+				.addReference(classpathRef)
+				.load()
+				.getProps();
+			Assert.assertEquals(6,result.size()); // override must have occurred
+			Assert.assertEquals("This value", result.get("item0")); // override value
 			
 			tmpExternal.deleteOnExit();
 			

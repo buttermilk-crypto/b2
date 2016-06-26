@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import asia.redact.bracket.properties.adapter.Env;
-import asia.redact.bracket.properties.adapter.Alias;
-import asia.redact.bracket.properties.adapter.Sugar;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;
@@ -40,15 +37,17 @@ public interface Properties {
 	public void clear();
 	public void deleteKey(String key);
 	public Properties merge(Properties props);
-	
 	public Properties slice(String keyBase);
 	
 	// conversions
-	
 	public Map<String,ValueModel> asMap();
 	public Map<String,String> asFlattenedMap();
 	public List<KeyValueModel> asList();
 	public java.util.Properties asLegacy();
+	
+	// character encoding conversions
+	public Properties asciiToNative(); // return a new Properties instance and convert any ASCII escapes to UTF-8
+	public Properties nativeToAscii(); // return a new Properties instance and concert UTF-8 to ASCII
 	
 	// formatting
 	public String toXML();

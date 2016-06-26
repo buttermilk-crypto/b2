@@ -13,7 +13,7 @@ import asia.redact.bracket.util.EnvResolver;
  */
 public class EnvAdapter implements Env {
 	
-	Properties props;
+	final Properties props;
 	
 	public EnvAdapter(Properties props) {
 		this.props = props;

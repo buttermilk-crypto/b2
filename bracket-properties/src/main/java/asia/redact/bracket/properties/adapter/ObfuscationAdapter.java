@@ -7,8 +7,8 @@ import asia.redact.bracket.util.Obfuscater;
 
 public class ObfuscationAdapter implements Obfuscation {
 
-	Properties props;
-	Obfuscater actor;
+	final Properties props;
+	final Obfuscater actor;
 	
 	public ObfuscationAdapter(Properties props) {
 		this.props = props;

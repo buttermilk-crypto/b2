@@ -64,6 +64,13 @@ public class BasicValueModel implements ValueModel {
   			this.values.add(v);
   		}
   	}
+    
+    public BasicValueModel(Comment comments, char sep, List<String> values) {
+    	this.separator = sep;
+  		this.comments = comments;
+  		this.values = new ArrayList<String>();
+  		values.forEach(item->this.values.add(item));
+  	}
 
 	@Override
 	public synchronized int hashCode() {

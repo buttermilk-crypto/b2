@@ -14,19 +14,29 @@ import asia.redact.bracket.properties.line.LineScanner;
 import asia.redact.bracket.properties.values.BasicValueModel;
 
 public class PropertiesParser {
+	
 
 	final LineScanner scanner;
 	Properties props;
 	boolean concurrent;
+	int options;
 
 	public PropertiesParser(LineScanner scanner) {
 		this.scanner = scanner;
 		this.concurrent = false;
+		this.options = 0;
 	}
 	
-	public PropertiesParser(LineScanner scanner, boolean concurrent) {
+	public PropertiesParser(LineScanner scanner, int options) {
+		this.scanner = scanner;
+		this.concurrent = false;
+		this.options = options;
+	}
+	
+	public PropertiesParser(LineScanner scanner, boolean concurrent, int options) {
 		this.scanner = scanner;
 		this.concurrent = concurrent;
+		this.options = options;
 	}
 	
 	public void setConcurrent(boolean concurrent) {
@@ -62,11 +72,11 @@ public class PropertiesParser {
 		boolean hasContinuation = false;
 		while ((line = scanner.line()) != null) {
 			if (hasContinuation) { // previous line has continuation
-				model.addValue(line.logicalLineContents()); // so collect the current line
-				if (line.hasContinuation()) { 				// if current line has continuation
-					continue; 								// then continue our tight collection loop
+				model.addValue(line.logicalLineContents()); 
+				if (line.hasContinuation()) {
+					continue; 								
 				} else {
-					hasContinuation = false; 				// the continuation has ended
+					hasContinuation = false; 				
 					// Issue 8 fix
 					props.put(key, model);
 					key = null;
@@ -97,7 +107,6 @@ public class PropertiesParser {
 				model.setSeparator(parts[1].charAt(0));
 				hasContinuation = line.hasContinuation();
 				model.addValue(parts[2]);
-
 			}
 		}
 		// last one
@@ -111,4 +120,5 @@ public class PropertiesParser {
 	public Properties getProperties() {
 		return props;
 	}
+	
 }

@@ -102,8 +102,36 @@ public class ParserTest {
 				x.printStackTrace();
 			}
 		}
-		
 	}
 	
+	@Test
+	public void trimstest() {
+		
+		String trims = "/trims/trims.properties";
+		
+		try (InputStream in = this.getClass().getResourceAsStream(trims);
+				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.ISO_8859_1);
+				LineScanner scanner = new LineScanner(reader);
+		) {
+			
+			PropertiesParser pp = new PropertiesParser(scanner);
+			pp.parse();
+			Properties props = pp.getProperties();
+			Assert.assertTrue(props.size() == 3);
+			// by default keys are trimmed:
+			Assert.assertTrue(props.containsKey("key0"));
+			Assert.assertTrue(props.containsKey("key1"));
+			Assert.assertTrue(props.containsKey("key2"));
+			
+			Assert.assertTrue(props.get("key0").equals("my value"));
+			Assert.assertTrue(props.get("key1").equals("my value"));
+			// this one is a continuation - tricky!
+			System.err.println(props.get("key2")+"|"); // = my value and a second value
+			Assert.assertTrue(props.get("key2").equals("my value and a second value"));
+
+		} catch (IOException x) {
+			x.printStackTrace();
+		}	
+	}
 
 }

@@ -3,24 +3,23 @@
  *  Copyright 2013 David R. Smith
  *
  */
-package asia.redact.bracket.util;
+package asia.redact.bracket.properties.io;
 
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
 /**
- * <pre>
+ * <p>
  * Rework of the Sun open source code - write UTF escapes for higher than ASCII characters.
+ * </p>
  * 
- * Known issues:
- * 
- * The serialization does not use caps for hex A-F as I would like
- * 
- * </pre>
+ * <p>
+ * Known issues: The serialization does not use caps for hex A-F as I would like
+ * </p>
  * 
  * @author Dave
- *
+ * @see AsciiToNativeFilterReader
  */
 public class NativeToAsciiFilterWriter extends FilterWriter {
 	

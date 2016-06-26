@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import asia.redact.bracket.properties.Properties;
+import asia.redact.bracket.properties.io.AsciiToNativeFilter;
+import asia.redact.bracket.properties.io.NativeToAsciiFilter;
 import asia.redact.bracket.properties.values.BasicValueModel;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.Entry;
@@ -27,8 +29,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 	@Override
 	public Properties init() {
 		if (concurrent) {
-			map = Collections
-					.synchronizedMap(new LinkedHashMap<String, ValueModel>());
+			map = Collections.synchronizedMap(new LinkedHashMap<String, ValueModel>());
 		} else {
 			map = new LinkedHashMap<String, ValueModel>();
 		}
@@ -229,5 +230,51 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 				val.getValues().add(s);
 			}
 		}
+	}
+	
+	public Properties asciiToNative() {
+		Properties impl = new PropertiesImpl(concurrent).init();
+		for(Map.Entry<String,ValueModel> entry: this.map.entrySet()){
+			ValueModel model = entry.getValue();
+			List<String> values = model.getValues();
+			ArrayList<String> newValues = new ArrayList<String>();
+			if(values.size()>0){
+				values.forEach(item->{
+					newValues.add(new AsciiToNativeFilter(item).read());
+				});
+			}
+			String comments = model.getComments().comments;
+			StringBuffer buf = new StringBuffer();
+			if (comments != null && comments.length() > 4) {
+				buf.append(new AsciiToNativeFilter(comments).read());
+			}
+			Comment newComments = new Comment(buf.toString());
+			impl.put(entry.getKey(), new BasicValueModel(newComments,model.getSeparator(),newValues));
+		}
+		
+		return impl;
+	}
+	
+	public Properties nativeToAscii() {
+		Properties impl = new PropertiesImpl(concurrent).init();
+		for(Map.Entry<String,ValueModel> entry: this.map.entrySet()){
+			ValueModel model = entry.getValue();
+			List<String> values = model.getValues();
+			ArrayList<String> newValues = new ArrayList<String>();
+			if(values.size()>0){
+				values.forEach(item->{
+					newValues.add(new NativeToAsciiFilter().write(item).getResult());
+				});
+			}
+			String comments = model.getComments().comments;
+			StringBuffer buf = new StringBuffer();
+			if (comments != null && comments.length() > 4) {
+				buf.append(new NativeToAsciiFilter().write(comments).getResult());
+			}
+			Comment newComments = new Comment(buf.toString());
+			impl.put(entry.getKey(), new BasicValueModel(newComments,model.getSeparator(),newValues));
+		}
+		
+		return impl;
 	}
 }

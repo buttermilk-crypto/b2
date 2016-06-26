@@ -40,8 +40,8 @@ import asia.redact.bracket.properties.ref.ReferenceType;
  */
 public class LoadList {
 
-	protected final List<PropertiesReference> list;
-	protected final Properties props;
+	final List<PropertiesReference> list;
+	final Properties props;
 
 	public LoadList() {
 		list = new ArrayList<PropertiesReference>();
@@ -195,6 +195,7 @@ public class LoadList {
 				}
 				
 			}else{
+				
 				try(
 						FileInputStream in = new FileInputStream(file);
 						InputStreamReader reader = new InputStreamReader(in, ref.charset);
@@ -206,9 +207,7 @@ public class LoadList {
 					}catch(IOException x){
 						throw new RuntimeException(x);
 					}
-					
 			}
-
 	}
 
 	public List<PropertiesReference> getList() {

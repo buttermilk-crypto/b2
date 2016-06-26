@@ -19,7 +19,7 @@ import asia.redact.bracket.properties.Properties;
  */
 public class SugarAdapter  implements Sugar {
 
-	private Properties props;
+	final Properties props;
 	
 	public SugarAdapter(Properties props) {
 		this.props = props;

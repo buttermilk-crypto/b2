@@ -3,22 +3,11 @@
  *  Copyright 2013 David R. Smith
  *
  */
-package asia.redact.bracket.util;
+package asia.redact.bracket.properties.io;
 
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
-
-/**
- * This FilterReader class processes a sequence of characters from
- * a source stream containing a mixture of 7-bit ASCII data and
- * 'back-tick U' escaped sequences representing characters which have 
- * the possibility of being encoded in a user specified encoding
- * The filter relies on knowing the target encoding and makes a
- * determination as to whether a given supplied character in its
- * source character stream can be encoded in the target encoding.
- * If not, it is remains in its back-tick U escaped form.
- */
 
 public class AsciiToNativeFilterReader extends FilterReader {
 	
