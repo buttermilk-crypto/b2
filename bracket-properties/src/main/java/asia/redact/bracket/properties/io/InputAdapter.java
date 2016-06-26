@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Utility methods to get data out of different sources.
+ * Utility methods to get data out of different sources. This is pre-java-8 style code, but it still works
  */
 public class InputAdapter {
 

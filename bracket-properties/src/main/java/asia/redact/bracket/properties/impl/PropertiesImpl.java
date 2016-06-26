@@ -240,6 +240,8 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 			ArrayList<String> newValues = new ArrayList<String>();
 			if(values.size()>0){
 				values.forEach(item->{
+					String newVal = new AsciiToNativeFilter(item).read();
+					System.err.println("Converted: "+item+" to "+newVal);
 					newValues.add(new AsciiToNativeFilter(item).read());
 				});
 			}

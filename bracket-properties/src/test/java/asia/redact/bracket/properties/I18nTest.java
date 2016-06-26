@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import asia.redact.bracket.properties.i18n.ResourceFinder;
 import asia.redact.bracket.properties.i18n.LocalePathBuilder;
-import asia.redact.bracket.properties.io.AsciiToNativeFilter;
 
 public class I18nTest {
 
@@ -28,24 +27,32 @@ public class I18nTest {
 	@Test
 	public void test1() {
 		
-		// as classpath, ascii
+		// legacy encoding approach
 		ResourceFinder rf = new ResourceFinder("ibmresbundle/app", Locale.JAPANESE, ".properties");
 		Properties props = rf.locate();
 		Assert.assertNotNull(props);
-		System.err.println(props.get("email").length());
+		String email = props.get("email"); // still in unicode escape format
+		Assert.assertEquals("E\\u30e1\\u30fc\\u30eb", email);
 		
-		// as classpath, utf8 encoded
-		rf = new ResourceFinder("ibmresbundle/app", Locale.JAPANESE, ".utf8");
-		props = rf.locate();
-		Assert.assertNotNull(props);
-		AsciiToNativeFilter filter = new AsciiToNativeFilter("\u96fb\u5b50\u30e1\u30fc\u30eb");
-		Assert.assertTrue(props.get("email").equals(filter.read()));
-		
-		// as external file in the project
-		//rf = new ResourceFinder("src/test/java/ibmresbundle/app", Locale.JAPANESE, ".utf8");
-	//	props = rf.locate();
-		//Assert.assertNotNull(props);
+		//to make them usable, encode Properties to UTF-8 with asciiToNative()
+		Properties nativeImpl = props.asciiToNative(); // makes a clone
+		Assert.assertNotNull(nativeImpl);
+		email = nativeImpl.get("email"); // UTF-8 encoded cloned value
+		Assert.assertEquals("Eメール", email);
+				
+			
 		
 	}
+	
+	@Test
+	public void test2() {
+			ResourceFinder rf = new ResourceFinder("ibmresbundle/app", Locale.JAPANESE, ".utf8");
+			Properties props = rf.locate();
+			Assert.assertNotNull(props);
+			String email = props.get("email"); // UTF-8 encoded
+			Assert.assertEquals("Eメール", email);
+	}
+	
+	
 }
 

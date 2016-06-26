@@ -27,15 +27,17 @@ import asia.redact.bracket.properties.line.LineScanner;
  * it does, we will assume the resources are external. If "path" does not exist externally, we will
  * look for it in the classpath.</p> 
  * 
- * <p>Use ".utf8" as the file extension for loading UTF-8 encoded files. Use ".properties" for traditional
- * resource files containing unicode escapes</p>
+ * <p>Files with ".utf8" as the file extension are understood as UTF-8 encoded files. Do not use a BOM marker.</p>
+ * 
+ *  <p>Files with".properties" extension are understood as traditional resource files containing unicode escapes.
+ *  These escapes are not processed during the parse - you can convert the encoding using the encoding API.</p>
  * 
  * @author Dave
  */
 public class ResourceFinder {
 
 	final Properties props;
-	final LocalePathBuilder pathBuilder;
+	LocalePathBuilder pathBuilder;
 	boolean isExternal;
 	Charset charset;
 	
@@ -49,11 +51,7 @@ public class ResourceFinder {
 	public ResourceFinder(String path, Locale locale, String fileExt) {
 		super();
 		this.props = new PropertiesImpl(false).init();
-		pathBuilder = new LocalePathBuilder(path,locale,fileExt);
-		File file = new File(path);
-		if(file.exists() && file.isDirectory())isExternal = true;
-		if(fileExt.contains("utf8"))charset=StandardCharsets.UTF_8;
-		else charset = StandardCharsets.ISO_8859_1;
+		init(path,locale,fileExt);
 	}
 	
 	/**
@@ -66,6 +64,10 @@ public class ResourceFinder {
 	public ResourceFinder(Properties props, String path, Locale locale, String fileExt) {
 		super();
 		this.props = props;
+		init(path,locale,fileExt);
+	}
+	
+	private void init(String path, Locale locale, String fileExt) {
 		pathBuilder = new LocalePathBuilder(path,locale,fileExt);
 		File file = new File(path);
 		if(file.exists() && file.isDirectory())isExternal = true;
