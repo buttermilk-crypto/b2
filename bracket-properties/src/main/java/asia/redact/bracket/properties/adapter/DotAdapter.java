@@ -1,5 +1,6 @@
 package asia.redact.bracket.properties.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +81,20 @@ public class DotAdapter implements Dot {
 			list.add(numberedMap.get(i));
 		}
 		return list;
+	}
+	
+	@Override
+	public String generateClasspath(String keyBase) {
+		List<String> list = valueList(keyBase);
+		StringBuffer classpath = new StringBuffer();
+		int i = 0;
+		for(String s: list){
+			classpath.append(s);
+			if(i<list.size()-1)classpath.append(File.pathSeparator);
+			i++;
+		}
+		
+		return classpath.toString();
 	}
 	
 }

@@ -50,5 +50,13 @@ public interface Dot {
 	 * @return
 	 */
 	public abstract List<String> valueList(String keyBase);
+	
+	/**
+	 * Generate a classpath appropriate to this OS
+	 * 
+	 * @param keyBase
+	 * @return
+	 */
+	public String generateClasspath(String keyBase);
 
 }
