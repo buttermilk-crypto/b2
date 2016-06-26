@@ -24,6 +24,16 @@ public class TypeConvertAdapter  implements TypeConverter {
 	public TypeConvertAdapter(Properties props) {
 		this.props = props;
 	}
+	
+	@Override
+	public String stringValue(String key){
+		return props.get(key);
+	}
+	
+	@Override
+	public char[] passwordValue(String key){
+		return props.get(key).toCharArray();
+	}
 
 	@Override
 	public int intValue(String key) {
@@ -128,6 +138,12 @@ public class TypeConvertAdapter  implements TypeConverter {
 		return new BigDecimal(props.get(key).trim());
 	}
 
+	public void put(String key, String val){
+		props.put(key,val);
+	}
+	public void put(String key, char[]pass){
+		props.put(key,new String(pass));
+	}
 	public void put(String key, int val){
 		props.put(key,String.valueOf(val));
 	}

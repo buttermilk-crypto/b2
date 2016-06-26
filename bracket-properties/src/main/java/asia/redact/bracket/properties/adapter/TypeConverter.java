@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TypeConverter {
 	
+	public String stringValue(String key);
+	public char[] passwordValue(String key);
 	public int intValue(String key);
 	public boolean booleanValue(String key); // Works for "true/false", "enabled/disabled", "yes/no", "1/0"
 	public long longValue(String key);
@@ -22,6 +24,8 @@ public interface TypeConverter {
 	public BigInteger bigValue(String key);
 	public BigDecimal bigDecimalValue(String key);
 	
+	public void put(String key, String val);
+	public void put(String key, char[] val);
 	public void put(String key, int val);
 	public void put(String key, byte val);
 	public void put(String key, short val);

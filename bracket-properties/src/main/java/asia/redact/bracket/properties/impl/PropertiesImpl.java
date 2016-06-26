@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import asia.redact.bracket.properties.Properties;
+import asia.redact.bracket.properties.Sugar;
 import asia.redact.bracket.properties.io.AsciiToNativeFilter;
 import asia.redact.bracket.properties.io.NativeToAsciiFilter;
 import asia.redact.bracket.properties.values.BasicValueModel;
@@ -300,5 +301,10 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public Sugar sugar() {
+		return new Sugar(this);
 	}
 }

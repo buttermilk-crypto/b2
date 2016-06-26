@@ -58,4 +58,7 @@ public interface Properties {
 	public String toYAML();
 	public String toString();
 	
+	// sugar interface
+	public Sugar sugar();
+	
 }
