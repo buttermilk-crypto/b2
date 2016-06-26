@@ -32,12 +32,15 @@ public interface Properties {
 	public boolean containsKey(String key); // return true of the key exists
 	public boolean hasNonEmptyValue(String key); // return true if the key exists with a non-empty value
 	public int size();
+	public boolean hasKeyLike(String leftEdge);
+	public List<String> getMatchingKeys(String regex);
 	
 	// actions
 	public void clear();
 	public void deleteKey(String key);
 	public Properties merge(Properties props);
 	public Properties slice(String keyBase);
+	
 	
 	// conversions
 	public Map<String,ValueModel> asMap();

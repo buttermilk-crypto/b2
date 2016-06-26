@@ -17,11 +17,11 @@ import asia.redact.bracket.properties.Properties;
  * @author Dave
  *
  */
-public class SugarAdapter  implements Sugar {
+public class TypeConvertAdapter  implements TypeConverter {
 
 	final Properties props;
 	
-	public SugarAdapter(Properties props) {
+	public TypeConvertAdapter(Properties props) {
 		this.props = props;
 	}
 
@@ -168,5 +168,21 @@ public class SugarAdapter  implements Sugar {
 	@Override
 	public void put(String key, short val) {
 		props.put(key,String.valueOf(val));
+	}
+
+	@Override
+	public void put(String key, char delimiter, List<String> values) {
+		StringBuilder b = new StringBuilder();
+		values.forEach(item->{ 	
+				b.append(item); 
+				b.append(delimiter);
+		});
+		b.deleteCharAt(b.length()-1);
+		
+	}
+	
+	@Override
+	public void put(String key, List<String> values){
+		put(key, ' ',values);
 	}
 }

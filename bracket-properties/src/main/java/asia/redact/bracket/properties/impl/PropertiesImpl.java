@@ -279,4 +279,26 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 		
 		return impl;
 	}
+
+	@Override
+	public List<String> getMatchingKeys(String regex){
+		List<String> list = new ArrayList<String>();
+		for(String key : this.keySet()){
+			if(key.matches(regex)){
+				ValueModel value = map.get(key);
+			    list.add(value.getValue());
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public boolean hasKeyLike(String partial){
+		for(String key : this.keySet()){
+			if(key.startsWith(partial)){
+				return true;
+			}
+		}
+		return false;
+	}
 }

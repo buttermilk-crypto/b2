@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.util.BitSet;
 import java.util.List;
 
-public interface Sugar {
+public interface TypeConverter {
 	
 	public int intValue(String key);
 	public boolean booleanValue(String key); // Works for "true/false", "enabled/disabled", "yes/no", "1/0"
@@ -32,5 +32,7 @@ public interface Sugar {
 	public void put(String key, char val);
 	public void put(String key, BigInteger bi);
 	public void put(String key, BigDecimal bd);
+	public void put(String key, List<String> values);
+	public void put(String key, char delimiter, List<String> values);
 
 }
