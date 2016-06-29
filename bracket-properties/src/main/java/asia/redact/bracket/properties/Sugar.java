@@ -26,8 +26,8 @@ public class Sugar {
 		return new ObfuscationAdapter(props);
 	}
 	
-	TypeConverter types() {
-		return new TypeConvertAdapter(props);
+	Types types() {
+		return new TypesAdapter(props);
 	}
 	
 }

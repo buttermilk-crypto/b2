@@ -12,6 +12,7 @@ import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.properties.Sugar;
 import asia.redact.bracket.properties.io.AsciiToNativeFilter;
 import asia.redact.bracket.properties.io.NativeToAsciiFilter;
+import asia.redact.bracket.properties.io.OutputAdapter;
 import asia.redact.bracket.properties.values.BasicValueModel;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.Entry;
@@ -197,14 +198,12 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 
 	@Override
 	public String toXML() {
-		// TODO Auto-generated method stub
-		return null;
+		return OutputAdapter.toXML(this);
 	}
 
 	@Override
 	public String toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		return OutputAdapter.toJSON(this);
 	}
 
 	@Override

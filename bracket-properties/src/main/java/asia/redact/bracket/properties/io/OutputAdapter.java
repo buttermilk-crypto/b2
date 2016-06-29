@@ -5,7 +5,6 @@
  */
 package asia.redact.bracket.properties.io;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,11 +13,12 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import asia.redact.bracket.properties.Properties;
+import asia.redact.bracket.properties.json.JsonObject;
+import asia.redact.bracket.properties.json.WriterConfig;
 import asia.redact.bracket.properties.values.ValueModel;
 
 
@@ -120,6 +120,12 @@ public class OutputAdapter {
 		writeTo(writer,new PlainOutputFormat());
 	}
 	
+	/**
+	 * Write properties in the default manner
+	 * 
+	 * @param props
+	 * @return
+	 */
 	public static final String toString(Properties props){
 		OutputAdapter out = new OutputAdapter(props);
 		StringWriter writer = new StringWriter();
@@ -132,21 +138,36 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * Just leverage the legacy XML DTD. 
+	 * Write out a Sun DTD compatible XML-formatted string representation of the properties. The
+	 * comments are not retained. This improves on the legacy Properties class only in 
+	 * that order is retained and CDATA is applied on values when required
 	 * 
 	 * @param props
 	 * @return
 	 */
 	public static final String toXML(Properties props){
-		java.util.Properties p = props.asLegacy();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		StringWriter writer = new StringWriter();
 		try {
-			p.storeToXML(out, "");
+			new OutputAdapter(props).writeTo(writer, new XMLOutputFormat());
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
-		
-		return new String(out.toByteArray(), StandardCharsets.UTF_8);
+		return writer.toString();
+	}
+	
+	/**
+	 * Simple JSON formatting
+	 * 
+	 * @param props
+	 * @return
+	 */
+	public static final String toJSON(Properties props){
+		JsonObject contents = new JsonObject();
+		props.forEach((k,v)->{
+			contents.add(k, v.getValue());
+			
+		});
+		return contents.toString(WriterConfig.PRETTY_PRINT);
 	}
 
 }

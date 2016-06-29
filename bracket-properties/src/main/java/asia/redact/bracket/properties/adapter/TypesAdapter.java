@@ -17,11 +17,11 @@ import asia.redact.bracket.properties.Properties;
  * @author Dave
  *
  */
-public class TypeConvertAdapter  implements TypeConverter {
+public class TypesAdapter  implements Types {
 
 	final Properties props;
 	
-	public TypeConvertAdapter(Properties props) {
+	public TypesAdapter(Properties props) {
 		this.props = props;
 	}
 	

@@ -7,7 +7,6 @@ package asia.redact.bracket.properties.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

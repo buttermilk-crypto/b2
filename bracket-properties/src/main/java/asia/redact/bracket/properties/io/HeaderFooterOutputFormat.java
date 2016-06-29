@@ -11,8 +11,8 @@ import java.util.List;
 import asia.redact.bracket.properties.values.Comment;
 
 /**
- * Default formatting for properties output. You can implement your own if you don't like this one 
- * or it doesn't do what you require.
+ * An augmented format for properties output. You can implement your own
+ * using this as a base class if it doesn't do what you require.
  * 
  * @author Dave
  *

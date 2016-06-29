@@ -10,9 +10,10 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import asia.redact.bracket.properties.adapter.Dot;
 import asia.redact.bracket.properties.adapter.Env;
 import asia.redact.bracket.properties.adapter.Obfuscation;
-import asia.redact.bracket.properties.adapter.TypeConverter;
+import asia.redact.bracket.properties.adapter.Types;
 import asia.redact.bracket.properties.line.LineScanner;
 
 public class SugarTest {
@@ -33,7 +34,7 @@ public class SugarTest {
 			x.printStackTrace();
 		}
 		
-		TypeConverter t = props.sugar().types();
+		Types t = props.sugar().types();
 		t.stringValue("test.s1");
 		t.passwordValue("test.password1");
 		t.intValue("test.int1");
@@ -53,6 +54,10 @@ public class SugarTest {
 		ob.deobfuscate("password");
 		String pass = props.get("password");
 		System.err.println(pass);
+		
+		Dot dot = props.sugar().dot();
+		String classpath = dot.generateClasspath("wrapper.java.classpath");
+		System.err.println(classpath);
 		
 	}
 

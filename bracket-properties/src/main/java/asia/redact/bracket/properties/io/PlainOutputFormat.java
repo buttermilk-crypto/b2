@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 
- * Really simple, no frills output
+ * Really simple, no frills output similar to legacy.
  * 
  * @author Dave
  *

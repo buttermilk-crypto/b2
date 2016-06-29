@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.util.BitSet;
 import java.util.List;
 
-public interface TypeConverter {
+public interface Types {
 	
 	public String stringValue(String key);
 	public char[] passwordValue(String key);

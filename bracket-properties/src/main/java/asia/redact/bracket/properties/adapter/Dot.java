@@ -20,7 +20,7 @@ public interface Dot {
 	 * @param keyBase
 	 * @return
 	 */
-	public abstract List<String> getListKeys(String keyBase);
+	public List<String> getListKeys(String keyBase);
 
 	/**
 	 * <pre>
@@ -49,10 +49,10 @@ public interface Dot {
 	 * @param key
 	 * @return
 	 */
-	public abstract List<String> valueList(String keyBase);
+	public List<String> valueList(String keyBase);
 	
 	/**
-	 * Generate a classpath appropriate to this OS
+	 * Generate a classpath appropriate to this OS using values formatted as above
 	 * 
 	 * @param keyBase
 	 * @return
