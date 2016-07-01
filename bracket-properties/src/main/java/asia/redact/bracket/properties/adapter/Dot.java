@@ -51,6 +51,9 @@ public interface Dot {
 	 */
 	public List<String> valueList(String keyBase);
 	
+	public String delimitedList(String keyBase, String delim);
+	public String dotList(String keyBase); // the above with dots
+	
 	/**
 	 * Generate a classpath appropriate to this OS using values formatted as above
 	 * 

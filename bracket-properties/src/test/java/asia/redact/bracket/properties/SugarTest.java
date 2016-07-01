@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import asia.redact.bracket.properties.adapter.Dot;
 import asia.redact.bracket.properties.adapter.Env;
-import asia.redact.bracket.properties.adapter.Obfuscation;
+import asia.redact.bracket.properties.adapter.Sec;
 import asia.redact.bracket.properties.adapter.Types;
 import asia.redact.bracket.properties.line.LineScanner;
 
@@ -50,7 +50,7 @@ public class SugarTest {
 		String java_home = env.resolve("home.jh");
 		System.err.println(java_home);
 		
-		Obfuscation ob = props.sugar().sec();
+		Sec ob = props.sugar().sec();
 		ob.deobfuscate("password");
 		String pass = props.get("password");
 		System.err.println(pass);

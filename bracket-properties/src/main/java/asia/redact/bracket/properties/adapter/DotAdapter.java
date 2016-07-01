@@ -96,5 +96,24 @@ public class DotAdapter implements Dot {
 		
 		return classpath.toString();
 	}
+
+	@Override
+	public String delimitedList(String keyBase, String delim) {
+		List<String> list = valueList(keyBase);
+		StringBuffer b = new StringBuffer();
+		int i = 0;
+		for(String s: list){
+			b.append(s);
+			if(i<list.size()-1)b.append(delim);
+			i++;
+		}
+		
+		return b.toString();
+	}
+
+	@Override
+	public String dotList(String keyBase) {
+		return delimitedList(keyBase, ".");
+	}
 	
 }

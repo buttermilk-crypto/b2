@@ -7,8 +7,9 @@ import java.util.regex.Pattern;
 import asia.redact.bracket.properties.values.Comment;
 
 /**
- * Reimplement the Sun DTD to at least provide ordering. Sun only provided one comment block, at
- * the beginning. We can't do much with this and retain compatibility.
+ * Re-implementation of the legacy DTD to at least provide ordering and add CDATA 
+ * blocks when required. Sun only provided one comment block which is at the beginning. 
+ * We can't do much with this DTD and retain compatibility.
  * 
  * @author Dave
  *
@@ -20,8 +21,11 @@ public class XMLOutputFormat implements OutputFormat {
 	
 	private final static Pattern specialChars = Pattern.compile(">|<|'|\"|&");
 
-	public XMLOutputFormat() {
+	private final String comment;
+	
+	public XMLOutputFormat(String comment) {
 		super();
+		this.comment = comment;
 	}
 
 	@Override
@@ -36,7 +40,23 @@ public class XMLOutputFormat implements OutputFormat {
 
 	@Override
 	public String formatHeader() {
-		return "<properties>\n<comment/>\n";
+		if(comment == null)
+			return "<properties>\n<comment/>\n";
+		else {
+			StringBuffer b = new StringBuffer();
+			b.append("<properties>\n");
+			b.append("<comment>\n");
+			if(hasXMLSpecialChar(comment)){
+				b.append("<![CDATA[");
+				b.append(comment);
+				b.append("]]>");
+			}else{
+				b.append(comment);
+			}
+			b.append("<comment/>\n");
+			return b.toString();
+		}
+			
 	}
 
 	@Override

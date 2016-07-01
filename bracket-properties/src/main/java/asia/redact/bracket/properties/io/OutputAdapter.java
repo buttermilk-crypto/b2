@@ -148,7 +148,7 @@ public class OutputAdapter {
 	public static final String toXML(Properties props){
 		StringWriter writer = new StringWriter();
 		try {
-			new OutputAdapter(props).writeTo(writer, new XMLOutputFormat());
+			new OutputAdapter(props).writeTo(writer, new XMLOutputFormat(null));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

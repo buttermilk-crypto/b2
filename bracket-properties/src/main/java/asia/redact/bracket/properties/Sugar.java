@@ -22,8 +22,12 @@ public class Sugar {
 		return new EnvAdapter(props);
 	}
 	
-	Obfuscation sec() {
+	Sec sec() {
 		return new ObfuscationAdapter(props);
+	}
+	
+	Sec sec(char[]password) {
+		return new ObfuscationAdapter(props,password);
 	}
 	
 	Types types() {

@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.util.Obfuscater;
 
-public class ObfuscationAdapter implements Obfuscation {
+public class ObfuscationAdapter implements Sec {
 
 	final Properties props;
 	final Obfuscater actor;
@@ -39,30 +39,6 @@ public class ObfuscationAdapter implements Obfuscation {
 	public char[] deobfuscateToChar(String key){
 		String val = props.get(key);
 		return actor.decryptToChar(val,StandardCharsets.UTF_8);
-	}
-	
-	@Override
-	public void obfuscate(char[] password, String key) {
-		String val = props.get(key);
-		if(key != null && !key.equals("")){
-			String obfuscated = actor.encrypt(val);
-			props.put(key, obfuscated);
-		}
-	}
-
-	@Override
-	public void deobfuscate(char[] password, String key) {
-		String val = props.get(key);
-		if(key != null && !key.equals("")){
-			String deobfuscated = new Obfuscater(password).decrypt(val);
-			props.put(key, deobfuscated);
-		}
-	}
-
-	@Override
-	public char[] deobfuscateToChar(char[] password, String key) {
-		String val = props.get(key);
-		return new Obfuscater(password).decryptToChar(val,StandardCharsets.UTF_8);
 	}
 
 }

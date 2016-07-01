@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment/>
+<entry key="test.s1">my string</entry>
+<entry key="test.password1">my pass</entry>
+<entry key="test.int1">10</entry>
+<entry key="test.bool1">enabled</entry>
+<entry key="test.float1">10.0f</entry>
+<entry key="test.double1">10.0</entry>
+<entry key="test.long1">1000</entry>
+<entry key="test.date1">1366877556814</entry>
+<entry key="test.list1">First Second Third Fourth Fifth</entry>
+<entry key="home">My system properties java.home is: ${java.home}.</entry>
+<entry key="home.jh">My JAVA_HOME env variable is set to ${JAVA_HOME}.</entry>
+<entry key="password">lHvK4ifXj7CFYh+8gIsOODjT5hWmpMtYe+By9+yTsb4=</entry>
+<entry key="wrapper.java.classpath.1">../lib/wrapper.jar</entry>
+<entry key="wrapper.java.classpath.2">../lib/myapp.jar</entry>
+<entry key="wrapper.java.classpath.3">../lib/mysql.jar</entry>
+<entry key="wrapper.java.classpath.4">../classes</entry>
+<entry key="wrapper.java.classpath.10">../lib/wrapper2.jar</entry>
+<entry key="test.specialXMLChar.0"><![CDATA[>]]></entry>
+<entry key="test.specialXMLChar.1"><![CDATA[<]]></entry>
+<entry key="test.specialXMLChar.2"><![CDATA[&]]></entry>
+<entry key="test.specialXMLChar.3"><![CDATA[']]></entry>
+<entry key="test.specialXMLChar.4"><![CDATA["]]></entry>
+</properties>
+

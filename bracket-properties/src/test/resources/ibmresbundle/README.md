@@ -1,4 +1,5 @@
-based on IBM example code, but redone using native2ascii.exe from JDK
+started as IBM example code, but actually the files are redone using Google translate 
+and native2ascii.exe from JDK. The words might actually be gibberish to a native speaker.
 
 command:
 

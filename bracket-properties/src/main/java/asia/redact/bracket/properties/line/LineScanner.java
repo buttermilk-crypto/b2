@@ -10,7 +10,8 @@ import java.io.Reader;
 import java.io.Serializable;
 
 /**
- * 
+ * <p>This class was originally taken from Apache Harmony. The source is no longer online.</p>
+ *  
  * <p>Read a properties file line by line using line().</p>
  * 
  * <p>The idea is that as we read lines, we return not the line text but a Line object which
@@ -19,7 +20,7 @@ import java.io.Serializable;
  * <p>There is one extension: a comment line which starts with #;; is treated as transient (not read in). 
  * This token is used later to generate a transient header and footer if desired.</p>
  * 
- * <p>Note: because this is a Reader, you must call close() on it when done.</p>
+ * <p>Note: because this is a Reader, the caller must call close() on it when done.</p>
  * 
  * @see Line
  * @see LineEnding
