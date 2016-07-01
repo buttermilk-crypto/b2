@@ -5,17 +5,17 @@ import java.nio.charset.StandardCharsets;
 import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.util.Obfuscater;
 
-public class ObfuscationAdapter implements Sec {
+public class SecAdapter implements Sec {
 
 	final Properties props;
 	final Obfuscater actor;
 	
-	public ObfuscationAdapter(Properties props) {
+	public SecAdapter(Properties props) {
 		this.props = props;
 		actor = new Obfuscater();
 	}
 	
-	public ObfuscationAdapter(Properties props, char [] password) {
+	public SecAdapter(Properties props, char [] password) {
 		this.props = props;
 		actor = new Obfuscater(password);
 	}

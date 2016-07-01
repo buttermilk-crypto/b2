@@ -263,19 +263,47 @@ limitations of the java.util.Properties class, but is a nice idiom in itself:
 
     key.0=value
     key.1=another
-    key.2=still more
+    key.2=again
 
 This idiom is supported by the dot sugar:
 
     Properties props = ...; // with the above
     Dot dot = props.sugar().dot();
+    
     List<String> keys = dot.getListKeys("key"); // finds the matching keys
     List<String> values = dot.valueList("key"); // builds a list of the values
+    String s = dot.dotList("key");
     
+The String s looks like this:
 
-
-
+	value.another.again
 	
+## Access to the environment variables and system properties
+
+The Env sugar provides a templating capacity and brings the environment variables into the scope of any
+properties file:
+
+	Properties props = ...;
+	props.put("dir", "My home dir is: ${user.dir}");
+	Env env = props.sugar().env();
+	String dir = env.resolve("dir");
+	
+The value of the String "dir" will look something like this after the call to resolve():
+
+    My home dir is: C:\Users\dave
+    
+## Quotes
+
+There is a sugar for adding quotation marks to values:
+
+    Properties props = ...;
+	 props.put("line", "This is a sentence.");
+	 Quote quote = props.sugar().quote();
+	 String line = quote.curly("line");
+	 
+The value of the String "line" will look like this after the call to curly():
+
+	"This is a sentence." (not This is a sentence.)
 	
 
 

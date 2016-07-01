@@ -22,12 +22,16 @@ public class Sugar {
 		return new EnvAdapter(props);
 	}
 	
+	Quote quote() {
+		return new QuoteAdapter(props);
+	}
+	
 	Sec sec() {
-		return new ObfuscationAdapter(props);
+		return new SecAdapter(props);
 	}
 	
 	Sec sec(char[]password) {
-		return new ObfuscationAdapter(props,password);
+		return new SecAdapter(props,password);
 	}
 	
 	Types types() {
