@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import asia.redact.bracket.properties.adapter.Dot;
 import asia.redact.bracket.properties.adapter.Env;
+import asia.redact.bracket.properties.adapter.Quote;
 import asia.redact.bracket.properties.adapter.Sec;
 import asia.redact.bracket.properties.adapter.Types;
 import asia.redact.bracket.properties.line.LineScanner;
@@ -58,6 +59,10 @@ public class SugarTest {
 		Dot dot = props.sugar().dot();
 		String classpath = dot.generateClasspath("wrapper.java.classpath");
 		System.err.println(classpath);
+		
+		Quote q = props.sugar().quote();
+		q.curly("test.s1");
+		System.err.println(props.get("test.s1"));
 		
 	}
 

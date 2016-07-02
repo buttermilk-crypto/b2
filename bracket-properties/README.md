@@ -16,7 +16,7 @@ For maven, use:
 	    <version>2.0.0</version>
 	</dependency>
 
-For ant, download the bundle from [my web site] (https://www.cryptoregistry.com/downloads/bracket-properties/2.0.0/bracket-properties-2.0.0.zip).
+For ant, download the bundle from [my web site] (https://www.cryptoregistry.com/downloads/bracket-properties/).
 
 There is also the source at [Github](https://github.com/buttermilk-crypto/b2/tree/master/bracket-properties).
 
