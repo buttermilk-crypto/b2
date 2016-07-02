@@ -18,6 +18,8 @@ public class EnvResolver {
 	
 	private EnvResolver() {
 		variables = new HashMap<String,String>();
+		
+		// environment
 		Map<String,String> env = System.getenv();
 		Iterator<String> iter = env.keySet().iterator();
 		while(iter.hasNext()) {
@@ -25,6 +27,8 @@ public class EnvResolver {
 			String value = env.get(key);
 			variables.put(key.toLowerCase(), value);
 		}
+		
+		// system props
 		java.util.Properties systemProps = System.getProperties();
 		Iterator<Object> iter2 = systemProps.keySet().iterator();
 		while(iter2.hasNext()) {

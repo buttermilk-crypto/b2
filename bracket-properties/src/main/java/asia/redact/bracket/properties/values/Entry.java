@@ -1,15 +1,36 @@
 package asia.redact.bracket.properties.values;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Entry implements KeyValueModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String key;
-	private Comment comment;
+	private final String key;
+	private Comment comment; // may contain many lines. 
 	private List<String> values;
-	private char separator;
+	private char separator = '=';
+	
+	public Entry(String key, String ... values) {
+		super();
+		this.key = key;
+		comment = new Comment();
+		this.values = new ArrayList<String>();
+		for(String v: values){
+			this.values.add(v);
+		}
+	}
+	
+	public Entry(String key, Comment comment, String ... values) {
+		super();
+		this.key = key;
+		this.comment = comment;
+		this.values = new ArrayList<String>();
+		for(String v: values){
+			this.values.add(v);
+		}
+	}
 
 	public Entry(String key, char separator, Comment comment, List<String> values) {
 		super();

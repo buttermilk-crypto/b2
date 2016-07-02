@@ -121,7 +121,7 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * Write properties in the default manner
+	 * Write properties in the default manner to a String
 	 * 
 	 * @param props
 	 * @return
@@ -156,18 +156,31 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * Simple JSON formatting
+	 * Simple JSON formatting, emits the properties as an ordered, flattened JSON object. The output
+	 * is pretty-printed
 	 * 
 	 * @param props
 	 * @return
 	 */
 	public static final String toJSON(Properties props){
+		return toJSON(props,WriterConfig.PRETTY_PRINT);
+	}
+	
+	/**
+	 * Simple JSON formatting, emits the properties as an ordered, flattened JSON object
+	 * where you control the output format. Currently there are only two options. 
+	 * 
+	 * @param props
+	 * @param WriterConfig can be either WriterConfig.PRETTY_PRINT or WriterConfig.MINIMAL.
+	 * @return
+	 */
+	public static final String toJSON(Properties props, WriterConfig config){
 		JsonObject contents = new JsonObject();
 		props.forEach((k,v)->{
 			contents.add(k, v.getValue());
 			
 		});
-		return contents.toString(WriterConfig.PRETTY_PRINT);
+		return contents.toString(config);
 	}
 
 }

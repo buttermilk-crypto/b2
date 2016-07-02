@@ -208,8 +208,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 
 	@Override
 	public String toYAML() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -241,8 +240,7 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 			if(values.size()>0){
 				values.forEach(item->{
 					String newVal = new AsciiToNativeFilter(item).read();
-					System.err.println("Converted: "+item+" to "+newVal);
-					newValues.add(new AsciiToNativeFilter(item).read());
+					newValues.add(newVal);
 				});
 			}
 			String comments = model.getComments().comments;

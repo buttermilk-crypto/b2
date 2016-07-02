@@ -1,7 +1,12 @@
 package asia.redact.bracket.properties.io;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,18 +33,32 @@ public class InputAdapter {
 	public InputAdapter() {
 		props = new PropertiesImpl(false).init();
 	}
+	
+	public InputAdapter(boolean concurrent) {
+		props = new PropertiesImpl(concurrent).init();
+	}
 
 	public InputAdapter(Properties props) {
 		super();
 		this.props = props;
 	}
 	
+	/**
+	 * Load from a Java Map<String,?>. String.valueOf() is applied to the value of get(key). 
+	 * 
+	 * @param map
+	 */
 	public void readMap(Map<String,?> map){
 		map.keySet().forEach(key->{
 			props.put(key, String.valueOf(map.get(key)));
 		});
 	}
 	
+	/**
+	 * Read in from legacy java.util.Properties
+	 * 
+	 * @param legacy
+	 */
 	public void readLegacyProperties(java.util.Properties legacy){
 		Set<Object> set = legacy.keySet();
 		for(Object key: set) {
@@ -49,7 +68,26 @@ public class InputAdapter {
 	}
 	
 	/**
-	 * Read in a standard properties formatted file.
+	 * Read in from a given URL. Throws a RuntimeException on IOExceptions.
+	 * 
+	 * @param url
+	 */
+	public void readURL(URL url) {
+		try (
+				InputStream in = url.openStream();
+				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
+				BufferedReader breader = new BufferedReader(reader);
+				LineScanner scanner = new LineScanner(breader);
+		){
+			Properties p = new PropertiesParser(scanner).parse().getProperties();
+			props.merge(p);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Read in a standard (i.e., legacy) properties formatted file.
 	 *  
 	 * @param reader
 	 */
@@ -64,6 +102,11 @@ public class InputAdapter {
 		}
 	}
 	
+	/**
+	 * Read in from a stream encoded using the (legacy) Sun DTD.
+	 * 
+	 * @param reader
+	 */
 	public void readXML(Reader reader){
 		   SAXParserFactory factory = SAXParserFactory.newInstance();
 	        SAXParser parser;
@@ -76,6 +119,11 @@ public class InputAdapter {
 			}
 	}
 	
+	/**
+	 * Read in from a JSON-encoded stream.
+	 *  
+	 * @param in
+	 */
 	public void readJSON(Reader in){
 		JsonValue root;
 		try {

@@ -14,9 +14,10 @@ import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.properties.values.ValueModel;
 
 /**
- * Joins an OutputFormatter with a file to output. RandomAccessFiles can handle 
+ * Joins an OutputFormatter with a file to output. RandomAccessFiles provide 
  * file locking semantics for example if the data is being written to a file share 
- * (shared file system) by multiple app instances we can lock the file while we write it.
+ * (shared file system) by multiple app instances we can lock the file while 
+ * we write it. The caller manages this. 
  *  
  * @author Dave
  *
@@ -31,7 +32,7 @@ public class RandomAccessFileOutputAdapter {
 	}
 
 	/**
-	 * Write it out. The file must be closed externally to this operation.
+	 * Write it out. The file must be closed externally to this operation. 
 	 * 
 	 */
 	public void writeTo(RandomAccessFile file, OutputFormat format) throws IOException {

@@ -7,6 +7,7 @@ package asia.redact.bracket.properties;
 
 import java.util.Comparator;
 
+import asia.redact.bracket.properties.impl.ListBackedPropertiesImpl;
 import asia.redact.bracket.properties.impl.PropertiesImpl;
 import asia.redact.bracket.properties.impl.SortedPropertiesImpl;
 import asia.redact.bracket.properties.line.Line;
@@ -15,6 +16,8 @@ import asia.redact.bracket.properties.values.BasicValueModel;
 
 public class PropertiesParser {
 	
+	public final int OPTION_LIST_BACKED_IMPL = 0x10;
+	public final int OPTION_FILE_BACKED_IMPL = 0x20; // for possible future use
 
 	final LineScanner scanner;
 	Properties props;
@@ -27,16 +30,36 @@ public class PropertiesParser {
 		this.options = 0;
 	}
 	
+	/**
+	 * Use OPTION_LIST_BACKED_IMPL to get a List backed properties implementation. 
+	 * 
+	 * @param scanner
+	 * @param options
+	 */
 	public PropertiesParser(LineScanner scanner, int options) {
 		this.scanner = scanner;
 		this.concurrent = false;
 		this.options = options;
+		
+		if(options == OPTION_LIST_BACKED_IMPL) {
+			props = new ListBackedPropertiesImpl();
+		}
 	}
 	
+	/**
+	 * Use OPTION_LIST_BACKED_IMPL to get a List backed properties implementation. 
+	 * 
+	 * @param scanner
+	 * @param options
+	 */
 	public PropertiesParser(LineScanner scanner, boolean concurrent, int options) {
 		this.scanner = scanner;
 		this.concurrent = concurrent;
 		this.options = options;
+		
+		if(options == OPTION_LIST_BACKED_IMPL) {
+			props = new ListBackedPropertiesImpl();
+		}
 	}
 	
 	public void setConcurrent(boolean concurrent) {
@@ -44,7 +67,8 @@ public class PropertiesParser {
 	}
 	
 	/**
-	 * populates a SortedPropertiesImpl (which only makes sense if you need something other than insert-order ordering)
+	 * Use this constructor to get a SortedPropertiesImpl (which only makes sense if you need something 
+	 * other than insert-order ordering)
 	 * 
 	 * @param comparator
 	 * @return
