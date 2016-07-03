@@ -8,17 +8,36 @@
 
 	<name>Bracket Properties</name>
 	<description>Java(tm) Properties done right.</description>
-	
-	
+
+
 	<dependencies>
+
+		<!-- bracket properties has no RUNTIME dependencies. -->
+
+		<!-- Test scope only -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- these are compile time dependencies if you are building compiled Properties 
+			classes. They are not required at runtime at all. -->
+		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>javapoet</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -56,8 +75,8 @@
 				<configuration>
 					<show>private</show>
 					<nohelp>true</nohelp>
-              
-            </configuration>
+
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadoc</id>
@@ -94,10 +113,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!--  needed to get my inadequate comments to parse in Java 1.8 javadoc -->
+		<!-- needed to get my inadequate comments to parse in Java 1.8 javadoc -->
 		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
-	
+
 
 	<url>https://www.cryptoregistry.com/</url>
 	<licenses>
@@ -107,7 +126,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<inceptionYear>2011</inceptionYear>
 	<organization>
 		<name>David R. Smith</name>
