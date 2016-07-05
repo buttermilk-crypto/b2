@@ -20,8 +20,8 @@ public class RefTest {
 	@Test
 	public void test0() {
 		try {
-			// write out some temp properties as externals. 
 			
+			// write out some temp properties as externals. 
 			File tmpExternal = File.createTempFile("tempprop", "properties");
 			Properties props = new PropertiesImpl(false).init();
 			props.put("item.0", "my item");

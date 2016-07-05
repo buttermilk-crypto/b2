@@ -18,7 +18,7 @@ For maven, use:
 
 For ant, download the bundle from [my web site] (https://www.cryptoregistry.com/downloads/bracket-properties/).
 
-There is also the source at [Github](https://github.com/buttermilk-crypto/b2/tree/master/bracket-properties).
+There is also the source at [Github](https://github.com/buttermilk-crypto/b2/tree/master/bracket-properties). I am also adding new documentation to the [Github wiki](https://github.com/buttermilk-crypto/b2/wiki).
 
 ##Instantiation
 

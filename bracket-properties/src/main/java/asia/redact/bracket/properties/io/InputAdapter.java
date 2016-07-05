@@ -1,11 +1,14 @@
 package asia.redact.bracket.properties.io;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +44,20 @@ public class InputAdapter {
 	public InputAdapter(Properties props) {
 		super();
 		this.props = props;
+	}
+	
+	public void readFile(File path, Charset charset){
+		try (
+			FileInputStream in = new FileInputStream(path);
+			InputStreamReader reader = new InputStreamReader(in, charset);
+			BufferedReader breader = new BufferedReader(reader);
+			LineScanner scanner = new LineScanner(breader);
+		){
+			Properties p = new PropertiesParser(scanner).parse().getProperties();
+			props.merge(p);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**

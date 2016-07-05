@@ -1,5 +1,9 @@
 package asia.redact.bracket.properties;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
@@ -9,8 +13,43 @@ import org.junit.Test;
 
 import asia.redact.bracket.properties.i18n.ResourceFinder;
 import asia.redact.bracket.properties.i18n.LocalePathBuilder;
+import asia.redact.bracket.properties.io.AsciiOutputFormat;
+import asia.redact.bracket.properties.io.InputAdapter;
+import asia.redact.bracket.properties.io.OutputAdapter;
 
 public class I18nTest {
+	
+	
+	@Test
+	public void testUTF8Load() {
+		File propsFile = new File("src/test/resources/ibmresbundle/app_ja.utf8");
+		Assert.assertTrue(propsFile.exists());
+		InputAdapter in = new InputAdapter();
+		in.readFile(propsFile, StandardCharsets.UTF_8);
+		System.err.println(OutputAdapter.toString(in.props));
+		
+		StringWriter writer = new StringWriter();
+		try {
+			new OutputAdapter(in.props).writeTo(writer, new AsciiOutputFormat());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(writer.toString());
+		
+		// clone to an ASCII escaped version
+		Properties asciiEncoded = in.props.nativeToAscii();
+		System.err.println(asciiEncoded.toString());
+		
+		// read an explicitly escaped legacy style properties file
+		propsFile = new File("src/test/resources/ibmresbundle/app_ja.properties");
+		Assert.assertTrue(propsFile.exists());
+		in = new InputAdapter();
+		in.readFile(propsFile, StandardCharsets.ISO_8859_1);
+		System.err.println(in.props.toString());
+		// clone to native (UTF-8)
+		Properties nativeEncoded = in.props.asciiToNative();
+		System.err.println(OutputAdapter.toString(nativeEncoded));
+	}
 
 	@Test
 	public void test0() {
@@ -51,6 +90,11 @@ public class I18nTest {
 			Assert.assertNotNull(props);
 			String email = props.get("email"); // UTF-8 encoded
 			Assert.assertEquals("Eメール", email);
+			
+			rf = new ResourceFinder("ibmresbundle/app", Locale.KOREAN, ".utf8");
+			props = rf.locate();
+			email = props.get("email"); // UTF-8 encoded
+			Assert.assertEquals("이메일", email);
 	}
 	
 	
