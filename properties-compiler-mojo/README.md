@@ -124,6 +124,12 @@ To use the class you will instantiate it directly. Assuming your class name is C
 for the PojoPropertiesImpl option, the constructor is similar:
 
     Properties props = new CPropertiesPojo().init();
+    
+Or you can use it like this:
+
+     CPropertiesPojo pojo = new CPropertiesPojo().init();
+     String value = pojo.key0.getValue();
+     Assert.assertEquals(pojo.get("key.0"), value);
 
 All of the Properties interface methods are available, as are the sugars. 
 
