@@ -13,7 +13,7 @@
 
 	<dependencies>
 
-		<!-- this is the single runtime dependency -->
+		<!-- this is the single runtime dependency for the compiled output -->
 
 		<dependency>
 			<groupId>asia.redact.bracket.properties</groupId>

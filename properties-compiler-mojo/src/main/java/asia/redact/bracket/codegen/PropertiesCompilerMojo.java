@@ -1,3 +1,8 @@
+/*
+ *  This file is part of Bracket Properties
+ *  Copyright 2011-2016 David R. Smith, All Rights Reserved
+ *
+ */
 package asia.redact.bracket.codegen;
 
 import java.io.BufferedReader;
@@ -16,6 +21,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.properties.io.InputAdapter;
 
 
@@ -31,6 +37,10 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 	@Parameter( property = "pcompiler.targetClassname", defaultValue = "CompiledProperties" )
 	private String targetClassname;
 	
+	// must be one of PropertiesImpl or PojoPropertiesImpl
+	@Parameter( property = "pcompiler.baseClass", defaultValue = "PropertiesImpl" )
+	private String baseClass;
+	
 	@Parameter(property = "pcompiler.project", defaultValue = "${project}")
 	private MavenProject project;
 
@@ -41,38 +51,57 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		// TODO Auto-generated method stub
 		
-			getLog().info( "target class:"+targetPackage+"."+targetClassname);
-			getLog().info( "project:"+project);
-			getLog().info( "outputDir:"+outputDir);
-			getLog().info( "inputProperties:"+inputProperties);
+		getLog().info( "baseClass:"+baseClass);
+		getLog().info( "target class:"+targetPackage+"."+targetClassname);
+		getLog().info( "project:"+project);
+		getLog().info( "outputDir:"+outputDir);
+		getLog().info( "inputProperties:"+inputProperties);
+		
+		File f = new File(inputProperties);
+		if(!f.exists())
+			try {
+				throw new MojoExecutionException("input properties not found: "+f.getCanonicalPath());
+			} catch (IOException e) {}
+		InputAdapter in = new InputAdapter();
+		try (
+				FileInputStream inStream = new FileInputStream(f);
+				InputStreamReader reader = new InputStreamReader(inStream, StandardCharsets.US_ASCII);
+				BufferedReader breader = new BufferedReader(reader);
+		) {
+		in.read(breader);
 			
-			
-			File f = new File(inputProperties);
-			if(!f.exists())
-				try {
-					throw new MojoExecutionException("input properties not found: "+f.getCanonicalPath());
-				} catch (IOException e) {}
-			InputAdapter in = new InputAdapter();
-			try (
-					FileInputStream inStream = new FileInputStream(f);
-					InputStreamReader reader = new InputStreamReader(inStream, StandardCharsets.US_ASCII);
-					BufferedReader breader = new BufferedReader(reader);
-			) {
-				in.read(breader);
-				CompiledPropsGenerator gen = new CompiledPropsGenerator(in.props);
-				String claZZ = gen.generatePropertiesImpl(targetPackage, targetClassname);
-				write(claZZ);
-			}catch(IOException x){
-				getLog().error(x);
+		  switch(baseClass){
+			case "PropertiesImpl": this.executePropertiesImpl(in.props); break;
+			case "PojoPropertiesImpl": this.executePojoPropertiesImpl(in.props); break;
+			default: {
+				throw new MojoExecutionException("baseClass must be set to one of: PojoPropertiesImpl or PropertiesImpl");
 			}
-			
-			
-		    getLog().info("Adding " + outputDir.getAbsolutePath() + " to compile source root");
-		    project.addCompileSourceRoot(outputDir.getAbsolutePath());
+		 }
+		  
+		}catch(IOException x){
+			getLog().error(x);
+		}
 		
+		getLog().info("Adding " + outputDir.getAbsolutePath() + " to compile source root");
+		project.addCompileSourceRoot(outputDir.getAbsolutePath());
+		    
 	}
+	
+	void executePropertiesImpl(Properties props) throws MojoExecutionException, MojoFailureException {
+		CompiledPropsGenerator gen = new CompiledPropsGenerator(props);
+		String claZZ = gen.generatePropertiesImpl(targetPackage, targetClassname);
+		write(claZZ);
+	}
+	
+	void executePojoPropertiesImpl(Properties props) throws MojoExecutionException, MojoFailureException {
+		CompiledPropsGenerator gen = new CompiledPropsGenerator(props);
+		String claZZ = gen.generatePojoPropertiesImpl(targetPackage, targetClassname);
+		write(claZZ);
+	}
+	
+	// supporting methods
+	
 	
 	private void write(String claZZ) throws MojoExecutionException{
 		File parent = pathToFolders();
@@ -128,6 +157,14 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 
 	public void setInputProperties(String inputProperties) {
 		this.inputProperties = inputProperties;
+	}
+
+	public String getBaseClass() {
+		return baseClass;
+	}
+
+	public void setBaseClass(String baseClass) {
+		this.baseClass = baseClass;
 	}
 	
 }

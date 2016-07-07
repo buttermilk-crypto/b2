@@ -1,3 +1,8 @@
+/*
+ *  This file is part of Bracket Properties
+ *  Copyright 2011-2016 David R. Smith, All Rights Reserved
+ *
+ */
 package asia.redact.bracket.codegen;
 
 import java.io.IOException;
@@ -25,13 +30,13 @@ import asia.redact.bracket.properties.values.ValueModel;
 
 public class CompiledPropsGenerator {
 
-	Properties input;
+	final Properties input;
 
 	public CompiledPropsGenerator(Properties input) {
 		this.input = input;
 	}
 	
-	public String generatePojoProperties(String packageName, String simpleName) {
+	public String generatePojoPropertiesImpl(String packageName, String simpleName) {
 
 		// our abstract base class
 		ClassName implClass = ClassName.get("asia.redact.bracket.properties.impl", "PojoPropertiesBase");
