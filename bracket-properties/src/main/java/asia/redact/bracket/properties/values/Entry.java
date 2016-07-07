@@ -74,4 +74,16 @@ public class Entry implements KeyValueModel {
 		return key;
 	}
 
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
+
+	public void setValues(List<String> values) {
+		this.values = values;
+	}
+
+	public void setSeparator(char separator) {
+		this.separator = separator;
+	}
+
 }

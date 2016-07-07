@@ -9,7 +9,7 @@
 		<dependency>
 			<groupId>asia.redact.bracket.properties</groupId>
 			<artifactId>bracket-properties</artifactId>
-			<version>LATEST</version>
+			<version>2.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Test scope only -->
@@ -31,8 +31,9 @@
 
 				<configuration>
 					<targetPackage>com.example</targetPackage>
-					<targetClassname>CProperties</targetClassname>
+					<targetClassname>CPropertiesPojo</targetClassname>
 					<inputProperties>${basedir}/src/main/resources/input.properties</inputProperties>
+					<baseClass>PojoPropertiesImpl</baseClass>
 				</configuration>
 
 				<executions>
@@ -99,4 +100,5 @@
 		<system>None</system>
 	</ciManagement>
 
+	<name>properties-compiler-test</name>
 </project>

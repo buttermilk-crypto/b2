@@ -38,8 +38,10 @@ public class CompiledPropsGenerator {
 	
 	public String generatePojoPropertiesImpl(String packageName, String simpleName) {
 
+		ClassName propsClass = ClassName.get("asia.redact.bracket.properties","Properties");
+		
 		// our abstract base class
-		ClassName implClass = ClassName.get("asia.redact.bracket.properties.impl", "PojoPropertiesBase");
+		ClassName implClass = ClassName.get("asia.redact.bracket.properties.impl", "PojoPropertiesImpl");
 		
 		// serial UID
 		FieldSpec fieldSpec = FieldSpec.builder(long.class, "serialVersionUID")
@@ -74,9 +76,9 @@ public class CompiledPropsGenerator {
 			
 			FieldSpec fSpec = FieldSpec.builder(Entry.class, fieldName)
 					.addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-					.initializer("new $T($S, new $T($S), $L))", 
-							key, 
-							Entry.class, 
+					.initializer("new $T($S, new $T($S), $L)",  
+							Entry.class,
+							key,
 							Comment.class, 
 							escape(comments.comments), 
 							escapeValues(values))
@@ -88,8 +90,8 @@ public class CompiledPropsGenerator {
 		
 		// init method
 		MethodSpec.Builder imBuilder = MethodSpec.methodBuilder("init")
-				.addModifiers(Modifier.PUBLIC);
-		imBuilder.addStatement("super.init()");
+				.addModifiers(Modifier.PUBLIC)
+				.returns(propsClass);
 		
 		// initialize entries array 
 		imBuilder.addStatement("entries = new $T[$L]", Entry.class, map.size());
@@ -103,6 +105,8 @@ public class CompiledPropsGenerator {
 			imBuilder.addStatement("entries[$L] = $L", i, fieldName);
 			i++;
 		}
+		
+		imBuilder.addStatement("return this");
 		MethodSpec initMethod = imBuilder.build();
 		
 		// add init method to class builder

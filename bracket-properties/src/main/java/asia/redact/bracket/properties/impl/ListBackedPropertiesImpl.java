@@ -160,7 +160,9 @@ public class ListBackedPropertiesImpl implements Properties, Serializable {
 
 	@Override
 	public void forEach(BiConsumer<String, ValueModel> action) {
-		throw new UnsupportedOperationException();
+		for(KeyValueModel model: list){
+			action.accept(model.getKey(), model);
+		}
 	}
 
 	@Override

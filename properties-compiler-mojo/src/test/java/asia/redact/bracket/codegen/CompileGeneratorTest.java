@@ -24,6 +24,7 @@ public class CompileGeneratorTest {
 			in.read(reader);
 			CompiledPropsGenerator gen = new CompiledPropsGenerator(in.props);
 			gen.generatePropertiesImpl("com.props.project", "CProperties");
+			gen.generatePojoPropertiesImpl("com.props.project", "CPropertiesPojo");
 		}catch(IOException x){}
 	}
 
