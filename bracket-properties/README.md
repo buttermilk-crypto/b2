@@ -1,8 +1,8 @@
 # b2 (Bracket-Properties 2.0)
 
-Bracket Properties is a library to work with java .properties files. It has many features missing from the 
-core java implementation such as retention of order and UTF-8 support. If you can think of something you
-wish java properties files could do better, chances are bracket-properties already has it. 
+Bracket Properties is a library to work with java(tm) .properties files. It has many features missing from the 
+core java(tm) implementation such as retention of order and UTF-8 support. If you can think of something you
+wish java(tm) properties files could do better, chances are bracket-properties already has it. 
 
 This version is a complete rewrite and the API has changed quite a bit from 1.x.
 
@@ -306,7 +306,9 @@ The value of the String "line" will look like this after the call to curly():
 	"This is a sentence." (not This is a sentence.)
 	
 
+## Pre-compiled Properties
 
+There is some work on this topic going on.
 
  
 

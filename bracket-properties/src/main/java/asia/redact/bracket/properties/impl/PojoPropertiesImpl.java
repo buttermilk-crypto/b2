@@ -23,7 +23,7 @@ import asia.redact.bracket.properties.values.ValueModel;
  * @author Dave
  *
  */
-public abstract class PojoPropertiesBase implements Properties, Serializable {
+public abstract class PojoPropertiesImpl implements Properties, Serializable {
 	
 	// code gen will populates these fields in the subclass. For example:
 	//public final Entry key0 = new Entry("key.0", new Comment(""), "value0");
@@ -33,7 +33,7 @@ public abstract class PojoPropertiesBase implements Properties, Serializable {
 	
 	protected Entry[]entries;
 
-	public PojoPropertiesBase() {
+	public PojoPropertiesImpl() {
 	  // codegen populates these in init();
 	  //	entries = new Entry[2];
 	  //    entries[0] = key0;
