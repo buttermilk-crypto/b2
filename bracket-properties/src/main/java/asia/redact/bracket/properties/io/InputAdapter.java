@@ -126,12 +126,28 @@ public class InputAdapter {
 	 */
 	public void readXML(Reader reader){
 		   SAXParserFactory factory = SAXParserFactory.newInstance();
+		   factory.setValidating(false);
 	        SAXParser parser;
 			try {
 				parser = factory.newSAXParser();
 				InputSource source = new InputSource(reader);
 			    parser.parse(source, new BracketPropertiesSAXHandler(props));
 			} catch (Exception x){
+				x.printStackTrace();
+				throw new RuntimeException("Parsing properties failed: "+x.getMessage());
+			}
+	}
+	
+	public void readXML(Reader reader, boolean validate){
+		   SAXParserFactory factory = SAXParserFactory.newInstance();
+		   factory.setValidating(validate);
+	        SAXParser parser;
+			try {
+				parser = factory.newSAXParser();
+				InputSource source = new InputSource(reader);
+			    parser.parse(source, new BracketPropertiesSAXHandler(props));
+			} catch (Exception x){
+				x.printStackTrace();
 				throw new RuntimeException("Parsing properties failed: "+x.getMessage());
 			}
 	}
@@ -162,10 +178,19 @@ class BracketPropertiesSAXHandler extends DefaultHandler {
 	
 	protected Properties props;
 	
-	String key, value;
+	protected String key, value;
 	
 	public BracketPropertiesSAXHandler(Properties props) {
 		this.props = props;
+	}
+	
+	/**
+	 * Supply the DTD so the code does not go out and look for it on the URL in the file.
+	 */
+	public InputSource resolveEntity(String systemId, String publicId) throws SAXException, IOException {
+		InputStream in = this.getClass().getResourceAsStream("/xml/props.dtd");
+		InputStreamReader reader = new InputStreamReader(in,StandardCharsets.UTF_8);
+		return new InputSource(reader);
 	}
 	
 	public void characters(char[] buffer, int start, int length) {
@@ -174,19 +199,15 @@ class BracketPropertiesSAXHandler extends DefaultHandler {
 
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		
 		int count = attributes.getLength();
 		if(qName.equals("entry") && count > 0){
 			key = attributes.getValue("key");
 		}
-		
 	}
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		 
 		if(key != null)
 		props.put(key,value);
-		
 	}
 	
 }

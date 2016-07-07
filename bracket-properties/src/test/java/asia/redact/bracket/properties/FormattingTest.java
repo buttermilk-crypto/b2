@@ -68,7 +68,7 @@ public class FormattingTest {
 		InputStream in = this.getClass().getResourceAsStream("/xml/test-legacyDTD.xml");
 		Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
 		InputAdapter input = new InputAdapter();
-		input.readXML(reader);
+		input.readXML(reader, true);
 		Assert.assertTrue(input.props.size()==22);
 	}
 	

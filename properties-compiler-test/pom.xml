@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>asia.redact.bracket.properties</groupId>
+	<artifactId>properties-compiler-test</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>asia.redact.bracket.properties</groupId>
+			<artifactId>bracket-properties</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
+		<!-- Test scope only -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>asia.redact.bracket.properties</groupId>
+				<artifactId>pcompiler-maven-plugin</artifactId>
+				<version>1.0.0</version>
+
+				<configuration>
+					<targetPackage>com.example</targetPackage>
+					<targetClassname>CProperties</targetClassname>
+					<inputProperties>${basedir}/src/main/resources/input.properties</inputProperties>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>pcompiler</id>
+						<goals>
+							<goal>pcompiler</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<verbose>true</verbose>
+					<fork>false</fork>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- needed to get my inadequate comments to parse in Java 1.8 javadoc -->
+		<additionalparam>-Xdoclint:none</additionalparam>
+	</properties>
+
+
+	<url>https://www.cryptoregistry.com/</url>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<inceptionYear>2011</inceptionYear>
+	<organization>
+		<name>David R. Smith</name>
+		<url>https://www.cryptoregistry.com/</url>
+	</organization>
+	<scm>
+		<connection>scm:git:git://github.com/buttermilk-crypto/b2.git</connection>
+		<developerConnection>scm:git:git://github.com/buttermilk-crypto/b2.git</developerConnection>
+		<url>https://github.com/buttermilk-crypto/b2/properties-compiler-test</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>1</id>
+			<name>David R. Smith</name>
+			<email>davesmith.gbs@gmail.com</email>
+		</developer>
+	</developers>
+	<issueManagement>
+		<system>None</system>
+	</issueManagement>
+	<ciManagement>
+		<system>None</system>
+	</ciManagement>
+
+</project>
