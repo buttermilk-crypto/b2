@@ -4,7 +4,7 @@ Bracket Properties is a library to work with java(tm) .properties files. It has 
 core java(tm) implementation such as retention of order and UTF-8 support. If you can think of something you
 wish java(tm) properties files could do better, chances are bracket-properties already has it. 
 
-This version is a complete rewrite and the API has changed quite a bit from 1.x.
+This version is a complete rewrite and the API has changed quite a bit from 1.x. Requires Java 8.
 
 ## Get It
 
