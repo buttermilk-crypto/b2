@@ -1,3 +1,8 @@
+/*
+ *  This file is part of Bracket Properties
+ *  Copyright 2011-2016 David R. Smith, All Rights Reserved
+ *
+ */
 package asia.redact.bracket.properties.impl;
 
 import java.io.Serializable;
@@ -12,9 +17,15 @@ import asia.redact.bracket.properties.values.Entry;
 import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;
 
+/**
+ * An array-backed implementation. This is used as a base class for source-code generation.
+ * 
+ * @author Dave
+ *
+ */
 public abstract class PojoPropertiesBase implements Properties, Serializable {
 	
-	// code gen populates these in subclasses
+	// code gen will populates these fields in the subclass. For example:
 	//public final Entry key0 = new Entry("key.0", new Comment(""), "value0");
 	//public final Entry key1 = new Entry("key.1", new Comment(""), "value1");
 	
@@ -25,7 +36,7 @@ public abstract class PojoPropertiesBase implements Properties, Serializable {
 	public PojoPropertiesBase() {
 	  // codegen populates these in init();
 	  //	entries = new Entry[2];
-	  //  entries[0] = key0;
+	  //    entries[0] = key0;
 	  //	entries[1] = key1;
 	}
 	

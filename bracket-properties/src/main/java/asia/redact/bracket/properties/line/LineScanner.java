@@ -10,7 +10,7 @@ import java.io.Reader;
 import java.io.Serializable;
 
 /**
- * <p>This class was originally taken from Apache Harmony. The source is no longer online.</p>
+ * <p>This class source code was originally taken from <b>Apache Harmony</b>. The source is no longer online.</p>
  *  
  * <p>Read a properties file line by line using line().</p>
  * 
