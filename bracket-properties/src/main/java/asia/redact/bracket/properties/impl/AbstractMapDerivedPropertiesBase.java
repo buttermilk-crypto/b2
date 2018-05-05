@@ -14,7 +14,8 @@ import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.properties.values.ValueModel;
 
 /**
- * Base class for Map-derived Implementations. In this class we implement the common map-like facade methods.
+ * Base class for Map-derived Implementations. In this class we implement the common map-like 
+ * facade methods.
  * 
  * @author Dave
  *

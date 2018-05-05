@@ -10,7 +10,8 @@ import java.util.List;
 import asia.redact.bracket.properties.values.Comment;
 
 /**
- * You can implement custom output formats using this interface and OutputAdapter.writeTo(Writer, OutputFormat);
+ * The format interface. You can implement custom output formats using this interface and 
+ * OutputAdapter.writeTo(Writer, OutputFormat);
  * 
  * @author Dave
  */

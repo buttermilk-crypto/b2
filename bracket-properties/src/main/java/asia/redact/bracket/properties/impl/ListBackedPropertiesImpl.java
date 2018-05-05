@@ -24,10 +24,12 @@ import asia.redact.bracket.properties.values.ValueModel;
 
 /**
  * <p>A list-backed implementation. In theory this class could accept duplicate keys but we have
- * guards to prevent it.</p>
+ * guards to prevent it. Also it has got synchronized guards on operations so it
+ * should be reasonably thread-safe.</p>
  * 
  * @author Dave
- *
+ * @see PropertiesImpl
+ * @see SortedPropertiesImpl
  */
 public class ListBackedPropertiesImpl implements Properties, Serializable {
 

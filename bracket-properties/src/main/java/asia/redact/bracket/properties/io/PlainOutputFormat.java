@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 
- * Really simple, no frills output similar to legacy.
+ * Really simple, no frills output similar to legacy Properties.
  * 
  * @author Dave
  *

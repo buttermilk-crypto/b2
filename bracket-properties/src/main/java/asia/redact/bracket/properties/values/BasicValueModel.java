@@ -6,6 +6,7 @@
 
 package asia.redact.bracket.properties.values;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,12 @@ import java.util.List;
  * @author Dave
  *
  */
-public class BasicValueModel implements ValueModel {
+public class BasicValueModel implements ValueModel, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	final static String lineSeparator = System.getProperty("line.separator");
+	
 	protected final Comment comments;
 	protected final List<String> values;
 	protected char separator = '=';

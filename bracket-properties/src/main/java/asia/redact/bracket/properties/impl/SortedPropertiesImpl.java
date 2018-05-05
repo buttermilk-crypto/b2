@@ -20,6 +20,12 @@ import asia.redact.bracket.properties.values.BasicValueModel;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.ValueModel;
 
+/**
+ * A sortable implementation using a TreeMap
+ * 
+ * @author dave
+ *
+ */
 public class SortedPropertiesImpl extends PropertiesImpl implements Serializable {
 
 	private static final long serialVersionUID = 1L;

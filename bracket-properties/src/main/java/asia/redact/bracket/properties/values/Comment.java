@@ -5,6 +5,7 @@
  */
 package asia.redact.bracket.properties.values;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,8 +18,10 @@ import asia.redact.bracket.properties.io.OutputFormat;
  * @author Dave
  *
  */
-public class Comment implements Iterable<String> {
+public class Comment implements Serializable, Iterable<String> {
 
+	private static final long serialVersionUID = 1L;
+	
 	public String comments; // one or more comment lines.
 	
 	public Comment() {

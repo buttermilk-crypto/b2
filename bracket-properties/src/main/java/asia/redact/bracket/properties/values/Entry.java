@@ -5,10 +5,17 @@
  */
 package asia.redact.bracket.properties.values;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Entry implements KeyValueModel {
+/**
+ * Implements KeyValueModel. This is used in the scenario of a list implementation
+ * 
+ * @author dave
+ *
+ */
+public class Entry implements KeyValueModel, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

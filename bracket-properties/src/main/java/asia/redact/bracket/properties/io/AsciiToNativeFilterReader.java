@@ -9,10 +9,18 @@ import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * <p>
+ * Rework of the Sun open source code - read higher than ASCII characters.
+ * </p>
+ * 
+ * @author dave
+ * @see AsciiToNativeFilterWriter
+ */
 public class AsciiToNativeFilterReader extends FilterReader {
 	
-	// maintain a trailing buffer to hold any incompleted
-    // unicode escaped sequences
+	// maintain a trailing buffer to hold any incomplete
+    // Unicode escaped sequences
     private char[] trailChars = null;
 
 	public AsciiToNativeFilterReader(Reader in) {

@@ -70,9 +70,11 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * This is specifically intended for compatibility with java.util.Properties, which outputs in ISO-8859-1 (US-ASCII)
+	 * This is specifically intended for compatibility with java.util.Properties, 
+	 * which outputs in ISO-8859-1 (US-ASCII)
 	 * 
-	 * Use AsciiOutputFormat to get unicode escapes or an output format with similar filtering, as escapes are required
+	 * Use AsciiOutputFormat to get unicode escapes or an output format with similar 
+	 * filtering, as escapes are required
 	 * for compatibility.
 	 * 
 	 */
@@ -81,7 +83,8 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * This is specifically intended for compatibility with java.util.Properties, which outputs in ISO-8859-1 (US-ASCII)
+	 * This is specifically intended for compatibility with java.util.Properties, 
+	 * which outputs in ISO-8859-1 (US-ASCII)
 	 * 
 	 */
 	public void writeAsciiTo(File file) {
@@ -89,7 +92,8 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * This is specifically intended for compatibility with java.util.Properties, which outputs in ISO-8859-1 (US-ASCII)
+	 * This is specifically intended for compatibility with java.util.Properties, 
+	 * which outputs in ISO-8859-1 (US-ASCII)
 	 * 
 	 */
 	public void writeAsciiTo(Writer writer) {

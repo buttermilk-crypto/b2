@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Representation of a line of text in a properties file. Index is the absolute offset of this line in the 
- * file at the time it was read. The line end is not included in "text", it is found in the "ending" variable.</p>
+ * <p>Representation of a line of text in a properties file. Index is the absolute offset of 
+ * this line in the file at the time it was read. The line end is not included in "text", 
+ * it is found in the "ending" variable.</p>
  * 
  * <p>This class is thread-safe.</p>
  * 

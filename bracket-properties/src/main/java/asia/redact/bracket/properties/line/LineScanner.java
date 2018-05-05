@@ -10,11 +10,12 @@ import java.io.Reader;
 import java.io.Serializable;
 
 /**
- * <p>This class source code was originally taken from <b>Apache Harmony</b>. The source is no longer online.</p>
+ * <p>This class source code was originally taken from <b>Apache Harmony</b> project. The 
+ * source-code is no longer online.</p>
  *  
- * <p>Read a properties file line by line using line().</p>
+ * <p>Read a properties file line-by-line using line().</p>
  * 
- * <p>The idea is that as we read lines, we return not the line text but a Line object which
+ * <p>The idea is that as we read lines, we return not the line of text but a Line object which
  * has knowledge of its internal parts, such as if the line has a key, is an extended line, etc.</p>
  * 
  * <p>There is one extension: a comment line which starts with #;; is treated as transient (not read in). 
@@ -23,9 +24,6 @@ import java.io.Serializable;
  * <p>Note: because this is a Reader, the caller must call close() on it when done.</p>
  * 
  * @see Line
- * @see LineEnding
- * @see PropertiesToken
- * @see PropertiesTokenType
  * 
  */
 public class LineScanner extends Reader {

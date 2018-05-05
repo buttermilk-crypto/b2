@@ -18,22 +18,26 @@ import java.nio.charset.StandardCharsets;
  * <table>
  * <tr>
  * <td>
- * ReferenceType.EXTERNAL, in which case data is understood to be an Operating system path to a properties file
+ * ReferenceType.EXTERNAL, in which case data is understood to be an Operating system path to a 
+ * properties file
  * </td>
  * </tr>
  * <tr>
  * <td>
- * ReferenceType.CLASSLOADED, in which case data is understood as a path to a class loadable properties file
+ * ReferenceType.CLASSLOADED, in which case data is understood as a path to a class 
+ * loadable properties file
  * </td>
  * </tr>
  * <tr>
  * <td>
- * ReferenceType.DIRECT, in which case data is understood as raw properties name value pairs to be parsed as such
+ * ReferenceType.DIRECT, in which case data is understood as raw properties name-value 
+ * pairs to be parsed as such
  * </td>
  * </tr>
  * <tr>
  * <td>
- * ReferenceType.COMMANDLINE_OVERRIDE in which case data is the name of a property to be searched for from the command line 
+ * ReferenceType.COMMANDLINE_OVERRIDE in which case data is the name of a property to be 
+ * searched for from the command line 
  * </td>
  * </tr>
  * </table>

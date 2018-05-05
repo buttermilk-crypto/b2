@@ -5,6 +5,7 @@
  */
 package asia.redact.bracket.properties.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -24,8 +25,14 @@ import asia.redact.bracket.properties.values.Entry;
 import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;
 
+/**
+ * The default implementation class. Has a concurrent (thread-safe) constructor available
+ * 
+ * @author dave
+ *
+ */
 public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
-		Properties {
+		Properties, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
