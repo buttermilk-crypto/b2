@@ -15,31 +15,31 @@ public class Sugar {
 		this.props = props;
 	}
 	
-	Alias alias() {
+	public Alias alias() {
 		return new AliasAdapter(props);
 	}
 	
-	Dot dot() {
+	public Dot dot() {
 		return new DotAdapter(props);
 	}
 	
-	Env env() {
+	public Env env() {
 		return new EnvAdapter(props);
 	}
 	
-	Quote quote() {
+	public Quote quote() {
 		return new QuoteAdapter(props);
 	}
 	
-	Sec sec() {
+	public Sec sec() {
 		return new SecAdapter(props);
 	}
 	
-	Sec sec(char[]password) {
+	public Sec sec(char[]password) {
 		return new SecAdapter(props,password);
 	}
 	
-	Types types() {
+	public Types types() {
 		return new TypesAdapter(props);
 	}
 	
