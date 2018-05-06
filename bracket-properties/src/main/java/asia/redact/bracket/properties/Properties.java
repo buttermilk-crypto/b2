@@ -5,10 +5,14 @@
  */
 package asia.redact.bracket.properties;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import asia.redact.bracket.properties.impl.ListBackedPropertiesImpl;
+import asia.redact.bracket.properties.impl.PropertiesImpl;
+import asia.redact.bracket.properties.impl.SortedPropertiesImpl;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;
@@ -63,7 +67,28 @@ public interface Properties {
 	public String toYAML();
 	public String toString();
 	
-	// sugar interface
-	public Sugar sugar();
+	public static Properties instance() {
+		return new PropertiesImpl().init();
+	}
+	
+	public static Properties concurrentInstance() {
+		return new PropertiesImpl(true).init();
+	}
+	
+	public static Properties listInstance() {
+		return new ListBackedPropertiesImpl();
+	}
+	
+	public static Properties sortedInstance() {
+		return new SortedPropertiesImpl(false, new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}
+			
+		});
+	}
+	
 	
 }

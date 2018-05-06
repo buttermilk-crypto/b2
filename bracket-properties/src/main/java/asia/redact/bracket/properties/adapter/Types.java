@@ -11,12 +11,24 @@ import java.text.ParseException;
 import java.util.BitSet;
 import java.util.List;
 
+import asia.redact.bracket.properties.Properties;
+
+/**
+ * Syntactic sugar for various type conversions, i.e., retrieve the value and do type conversion in one operation
+ * 
+ * @author dave
+ *
+ */
 public interface Types {
+	
+	public static Types instance(Properties props) {
+		return new TypesAdapter(props);
+	}
 	
 	public String stringValue(String key);
 	public char[] passwordValue(String key);
 	public int intValue(String key);
-	public boolean booleanValue(String key); // Works for "true/false", "enabled/disabled", "yes/no", "1/0"
+	public boolean booleanValue(String key); // Works for values "true/false", "enabled/disabled", "yes/no", "1/0"
 	public long longValue(String key);
 	public float floatValue(String key);
 	public short shortValue(String key);

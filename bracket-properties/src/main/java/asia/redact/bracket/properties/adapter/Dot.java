@@ -7,7 +7,19 @@ package asia.redact.bracket.properties.adapter;
 
 import java.util.List;
 
+import asia.redact.bracket.properties.Properties;
+
 public interface Dot {
+	
+	/**
+	 * Return a class which implements the Dot interface.
+	 * 
+	 * @param props
+	 * @return
+	 */
+	public static Dot instance(Properties props) {
+		return new DotAdapter(props);
+	}
 
 	/**
 	 * <p>

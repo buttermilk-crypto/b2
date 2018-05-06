@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import asia.redact.bracket.properties.Properties;
-import asia.redact.bracket.properties.Sugar;
 import asia.redact.bracket.properties.io.AsciiToNativeFilter;
 import asia.redact.bracket.properties.io.NativeToAsciiFilter;
 import asia.redact.bracket.properties.io.OutputAdapter;
@@ -353,9 +352,5 @@ public abstract class PojoPropertiesImpl implements Properties, Serializable {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public Sugar sugar() {
-		return new Sugar(this);
-	}
 
 }

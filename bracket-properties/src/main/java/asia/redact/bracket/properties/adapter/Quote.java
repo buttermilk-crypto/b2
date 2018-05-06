@@ -5,6 +5,14 @@
  */
 package asia.redact.bracket.properties.adapter;
 
+import asia.redact.bracket.properties.Properties;
+
+/**
+ * Adapter that quotes values as they are returned. 
+ * 
+ * @author dave
+ *
+ */
 public interface Quote {
 
 	public void dq(String key); // same as get() but with quotation marks (\u0022)
@@ -15,5 +23,9 @@ public interface Quote {
 	public void dequote(String key);
 	public void quoteAll(char start, char end);
 	public void dequoteAll();
+	
+	public static Quote instance(Properties props) {
+		return new QuoteAdapter(props);
+	}
 	
 }

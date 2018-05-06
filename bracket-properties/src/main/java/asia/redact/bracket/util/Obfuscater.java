@@ -30,9 +30,11 @@ import javax.crypto.spec.SecretKeySpec;
 public final class Obfuscater {
 	
 	final byte [] salt = {0x23,0x42,0x10,0x37,0x08,0x77,0x55,0x19};
-	final char [] defaultPassword = {'t','g','A','6','Q','u','/', 'g','1','8','y','G',
+	final char [] defaultPassword = {
+			't','g','A','6','Q','u','/', 'g','1','8','y','G',
 			't','L','G','d','z','4','l','D','v','O','s','U','J','A','j',
-			'o','9','i','z','o','X','i','g','8','X','F','E','P','f','l','I'};
+			'o','9','i','z','o','X','i','g','8','X','F','E','P','f','l','I'
+	};
 	
 	// should work on most java 6 or better installs without import restrictions coming into play
 	final int KEY_LENGTH = 128;
