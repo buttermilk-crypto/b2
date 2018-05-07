@@ -7,6 +7,12 @@ package asia.redact.bracket.properties.adapter;
 
 import asia.redact.bracket.properties.Properties;
 
+/**
+ * Implements a simple reference scheme (so the same value can have multiple keys)
+ * 
+ * @author dave
+ *
+ */
 public interface Alias {
 	
 	static final String REF_TOKEN = "_$";

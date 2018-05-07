@@ -4,7 +4,7 @@ Bracket Properties is a library to work with java(tm) .properties files. It has 
 core java(tm) implementation such as retention of order and UTF-8 support. If you can think of something you
 wish java(tm) properties files could do better, chances are bracket-properties already has it. 
 
-This version is a complete rewrite and the API has changed quite a bit from 1.x. Requires Java 8.
+This version is a complete rewrite and the API has changed quite a bit from 1.x. Requires Java 8+.
 
 ## Get It
 
@@ -13,43 +13,34 @@ For maven, use:
 	<dependency>
 	    <groupId>asia.redact.bracket.properties</groupId>
 	    <artifactId>bracket-properties</artifactId>
-	    <version>2.0.0</version>
+	    <version>2.3.0</version>
 	</dependency>
-
-For ant, download the bundle from [my web site] (https://www.cryptoregistry.com/downloads/bracket-properties/).
-
-There is also the source at [Github](https://github.com/buttermilk-crypto/b2/tree/master/bracket-properties). I am also adding new documentation to the [Github wiki](https://github.com/buttermilk-crypto/b2/wiki).
 
 ##Instantiation
 
-
 	// Get properties from various I/O input sources
-	Reader reader = ...
-	InputAdapter ia = new InputAdapter();
-	Properties props = ia.read(reader);
+	Properties props = new InputAdapter().read(reader).props;
+	Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
+   
+    can be additive to pull in multiple files:
+   
+    new InputAdapter().readFile(file0, StandardCharsets.UTF_8).readFile(file1, StandardCharsets.UTF_8);
 	
-The above is syntactic sugar for
-	
-		try (
-		 LineScanner scanner = new LineScanner(reader);
-		){
-			Properties p = new PropertiesParser(scanner).parse().getProperties();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	
 You can also instantiate properties instances directly:
 	
-
 	Properties props; // interface asia.redact.bracket.properties.Properties
 		
-	props = new PropertiesImpl(false).init();
+	props = Properties.instance();
 	props.put("key", "value");
 	
-Setting the boolean argument to true for the PropertiesImpl constructor will cause the underlying map 
-to be made concurrent (i.e., to have thread-safe operations).  
+There are many different types of back-ends available:
 
-Some previous instantiation methods have been moved into the InputAdapter:
+    props = Properties.concurrentInstance(); // thread-safe backed collection
+    props = Properties.sortedInstance();     // for non-insert order
+    
+
+Some previous instantiation methods have been moved into the InputAdapter class:
 		
 	// from legacy java.util.Properties class
 	java.util.Properties legacy = new java.util.Properties();
@@ -114,9 +105,7 @@ Output is
 
 ## Comment Support
 
-Comments are retained and can be re-serialized as expected in most cases. The internal data structure basically sees comments
-as something above, rather than below, a key-value pair. There is also a way to programmatically set properties with
-a comment block. 
+Comments are retained and can be re-serialized as expected in most cases. The internal data structure basically sees comments as something above, rather than below, a key-value pair. There is also a way to programmatically set properties with a comment block. 
 
 	String key2 = "key2";
 	props.put(key2, new Comment("# You rock"), "my value");
@@ -124,8 +113,7 @@ a comment block.
 
 ## Accessors Support
  
- Basic accessor support is via the Properties interface. The sugar() interface now has all the additional
- methods:
+ Basic accessor support is via the Properties interface:
  
     public String get(String key);
 	public String get(String key, String defaultVal);
@@ -140,9 +128,9 @@ a comment block.
 	public void put(KeyValueModel model);
 	public void put(String key, ValueModel model);
  
-	// more using the Types sugar.
+	// more using the Types adapter
 	Properties props = ...;
-	Types t = props.sugar().types();
+	Types t = Types.instance(props);
 	t.stringValue("test.s1"); // return a string
 	t.intValue("test.int1"); // return a primitive int
 	t.booleanValue("test.bool1"); // return a boolean, e.g., test.bool1=enabled
@@ -151,18 +139,19 @@ a comment block.
 	List<String> list1 = t.listValue("test.list1"); // return a list
 	
 
-## Serialization Done Correctly
+## File Serialization Done Correctly
 
 	OutputAdapter out = new OutputAdapter(props); 
 	Writer w = new StringWriter(); 
 	out.writeTo(w); 
   
-or
+or output format can be customized to whatever required extent:
 
-	MyOutputFormat format = new MyOutputFormat(); 
+	MyOutputFormat format = new MyOutputFormat(); // implement OutputFormat
 	OutputAdapter out = new OutputAdapter(props); 
 	Writer w = new StringWriter(); 
 	out.writeTo(w, format); 
+	
  
 For the common case of java.util.Properties compatibility in US-ASCII encoding with embedded Unicode escapes, 
 AsciiOutputFormat is provided:
@@ -180,10 +169,13 @@ there is also the simple
 
 	OutputAdapter.toString(props);
 
+which uses PlainOutputFormat.
  
-## Easy Config Externalization 
+## Easy Configuration Externalization 
 
-The Ref API is for externalization and merging 
+The Ref API is for externalization and merging. It provides a fully featured properties over-ride
+system for application configs. You can develop with a classpath-based config and override
+it in deployment with an external config file.
 
 	// some externalized properties in user.home 
 	String home = System.getProperty("user.home"); 
@@ -194,21 +186,22 @@ The Ref API is for externalization and merging
 	
 	// these will load in order, merge, and override as expected
 	Properties result = new LoadList()
-				.addReference(new PropertiesReference(ReferenceType.CLASSLOADED,tProps))
-				.addReference(new PropertiesReference(ReferenceType.EXTERNAL,adminExtProps))
+				.addReference(new PropertiesReference(ReferenceType.CLASSLOADED, tProps))
+				.addReference(new PropertiesReference(ReferenceType.EXTERNAL, adminExtProps))
 				.load()
 				.getProps();
 
 
 ## Obfuscation
 
-Version 2.0.0 provides obfuscation and password protection via the sugar() interface:
+Version 2.0.0+ provides obfuscation and password protection via the Sec adapter:
 
     Properties props = ...;
     props.add("key", "value");
     
     char [] password = {...};
-    Sec sec = props.sugar().sec(password);
+    Sec sec = Sec.instance(props);
+    sec.sec(password);
     sec.obfuscate("key"); // the value of "key" is obfuscated.
 	 
 	 System.out.println("key = "+props.get("key"));

@@ -46,4 +46,27 @@ public class SecAdapter implements Sec {
 		return actor.decryptToChar(val,StandardCharsets.UTF_8);
 	}
 
+	@Override
+	public void encrypt(String key) {
+		String encVal = actor.encrypt(props.get(key));
+		props.put(key, encVal);
+		
+	}
+
+	@Override
+	public void decrypt(String key) {
+		String rawVal = actor.decrypt(props.get(key));
+		props.put(key, rawVal);
+	}
+
+	@Override
+	public char[] decryptToChar(String key) {
+		return actor.decryptToChar(props.get(key));
+	}
+
+	@Override
+	public void clearPassword() {
+		actor.clearPassword();
+	}
+
 }

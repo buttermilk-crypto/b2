@@ -14,6 +14,12 @@ import asia.redact.bracket.properties.line.Line;
 import asia.redact.bracket.properties.line.LineScanner;
 import asia.redact.bracket.properties.values.BasicValueModel;
 
+/**
+ * Parse properties input using a line scanner. 
+ * 
+ * @author dave
+ *
+ */
 public class PropertiesParser {
 	
 	public final int OPTION_LIST_BACKED_IMPL = 0x10;

@@ -55,9 +55,6 @@ public class DotAdapter implements Dot {
 		return list;
 	}
 
-	/* (non-Javadoc)
-	 * @see asia.redact.bracket.properties.adapter.Dot#valueList(java.lang.String)
-	 */
 	@Override
 	public List<String> valueList(String keyBase) {
 		List<String> list = new ArrayList<String>();
@@ -120,5 +117,38 @@ public class DotAdapter implements Dot {
 	public String dotList(String keyBase) {
 		return delimitedList(keyBase, ".");
 	}
+
+	/**
+	 * Create a list of properties of the form key.0, key.1, key.2, ...
+	 * 
+	 * @param keyBase
+	 * @param items
+	 */
+	public void putList(String keyBase, List<?> items) {
+		for(int i = 0; i<items.size(); i++) {
+			StringBuffer buf = new StringBuffer();
+			buf.append(keyBase);
+			buf.append(".");
+			buf.append(i);
+			props.put(buf.toString(), String.valueOf(items.get(i)));
+		}
+	}
+	
+	/**
+	 * Create a list of properties of the form key.0, key.1, key.2, ...
+	 * 
+	 * @param keyBase
+	 * @param items
+	 */
+	public void putList(String keyBase, String [] items) {
+		for(int i = 0; i<items.length; i++) {
+			StringBuffer buf = new StringBuffer();
+			buf.append(keyBase);
+			buf.append(".");
+			buf.append(i);
+			props.put(buf.toString(), items[i]);
+		}
+	}
+	
 	
 }

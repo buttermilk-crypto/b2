@@ -78,5 +78,11 @@ public interface Dot {
 	 * @return
 	 */
 	public String generateClasspath(String keyBase);
+	
+	
+	public void putList(String keyBase, List<?> items);
+	
+	
+	
 
 }

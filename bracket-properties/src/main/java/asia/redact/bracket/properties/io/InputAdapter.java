@@ -34,6 +34,23 @@ import asia.redact.bracket.properties.json.JsonObject;
 import asia.redact.bracket.properties.json.JsonValue;
 import asia.redact.bracket.properties.line.LineScanner;
 
+/**
+ * <p>Adapter for reading properties files.</p>
+ * 
+ * <pre>
+ * 
+ *  Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
+ *  
+ *  can be additive:
+ *  
+ *  new InputAdapter().readFile(file0, StandardCharsets.UTF_8).readFile(file1, StandardCharsets.UTF_8);
+ * 
+ * 
+ * </pre>
+ * 
+ * @author dave
+ *
+ */
 public class InputAdapter {
 
 	public final Properties props;
