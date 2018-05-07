@@ -21,7 +21,7 @@ Source:
     https://github.com/buttermilk-crypto/b2
 
 
-##Instantiation
+## Instantiation
 
 	// Get properties from various I/O input sources
 	Properties props = new InputAdapter().read(reader).props;
@@ -212,7 +212,7 @@ it in deployment with an external config file.
 				.getProps();
 
 
-## Obfuscation
+## Obfuscation/Encryption
 
 Version 2.0.0+ provides obfuscation and password protection via the Sec adapter:
 
