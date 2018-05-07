@@ -1,8 +1,8 @@
-# b2 (Bracket-Properties 2.0)
+# b2 (Bracket-Properties 2.3.0)
 
-Bracket Properties is a library to work with java(tm) .properties files. It has many features missing from the 
-core java(tm) implementation such as retention of order and UTF-8 support. If you can think of something you
-wish java(tm) properties files could do better, chances are bracket-properties already has it. 
+Bracket Properties is a library to work with Java(tm) .properties files. It has many features missing from the 
+core implementation such as retention of order and UTF-8 support. If you can think of something you
+wish properties files could do better, chances are bracket-properties already has it. 
 
 This version is a complete rewrite and the API has changed quite a bit from 1.x. Requires Java 8+.
 
@@ -15,6 +15,11 @@ For maven, use:
 	    <artifactId>bracket-properties</artifactId>
 	    <version>2.3.0</version>
 	</dependency>
+	
+Source:
+
+    https://github.com/buttermilk-crypto/b2
+
 
 ##Instantiation
 
@@ -22,21 +27,36 @@ For maven, use:
 	Properties props = new InputAdapter().read(reader).props;
 	Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
    
-    can be additive to pull in multiple files:
+InputAdapter has many virtues, for example it can be additive to pull in multiple files:
    
     new InputAdapter().readFile(file0, StandardCharsets.UTF_8).readFile(file1, StandardCharsets.UTF_8);
 	
+Under the hood, InputAdapter calls the PropertiesParser class:
+
+	public void readFile(File path, Charset charset){
+		try (
+			FileInputStream in = new FileInputStream(path);
+			InputStreamReader reader = new InputStreamReader(in, charset);
+			BufferedReader breader = new BufferedReader(reader);
+			LineScanner scanner = new LineScanner(breader);
+		){
+			Properties p = new PropertiesParser(scanner).parse().getProperties();
+			props.merge(p);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
-You can also instantiate properties instances directly:
+You can also instantiate Properties instances directly:
 	
 	Properties props; // interface asia.redact.bracket.properties.Properties
 		
 	props = Properties.instance();
 	props.put("key", "value");
 	
-There are many different types of back-ends available:
+There are several different types of back-ends available:
 
-    props = Properties.concurrentInstance(); // thread-safe backed collection
+     props = Properties.concurrentInstance(); // thread-safe backed collection
     props = Properties.sortedInstance();     // for non-insert order
     
 
@@ -210,10 +230,14 @@ Outputs something like:
 
 	key=lHvK4ifXj7CFYsb4=
 	
-You can also use the unsecure but simple sugar with no password provided:
+You can also use the simple obfuscation with no password provided:
 
-    Sec sec = props.sugar().sec(); // no password provided
-    sec.obfuscate("key"); // the value of "key" is obfuscated.
+    Sec sec = Sec.instance(props); // no password provided
+    sec.obfuscate("key"); // the value of "key" found in props is obfuscated.
+    
+later...
+
+    sec.deobfuscate("key"); // the value of key is now deobfuscated and ready to use
 	
 This will use the default key, which offers no security but does effectively obfuscate the value 
 if preventing casual visual inspection is the only objective.
@@ -238,9 +262,9 @@ Or just
 	String xml = OutputAdapter.toXML(props);
 
 
-## JSON Support
+## JSON Conversion Support
 
-Version 2.0 introduces a JSON API:
+Version 2.0 introduces a simple to use JSON API taken from the Eclipse Project:
 
     Reader reader = ...;
     InputAdapter ia = new InputAdapter();
@@ -251,17 +275,16 @@ Version 2.0 introduces a JSON API:
 	 
 ## Working with lists
 
-Properties have a use pattern where data is in a list form using an index. This was partly to combat the inherent
-limitations of the java.util.Properties class, but is a nice idiom in itself:
+Properties have a use pattern where data is in list form using an incrementing index. This was partly to combat the inherent limitations of the java.util.Properties class, but is a nice idiom in itself:
 
     key.0=value
     key.1=another
     key.2=again
 
-This idiom is supported by the dot sugar:
+This idiom is supported by the Dot adapter in several ways:
 
     Properties props = ...; // with the above
-    Dot dot = props.sugar().dot();
+    Dot dot = Dot.instance(props);
     
     List<String> keys = dot.getListKeys("key"); // finds the matching keys
     List<String> values = dot.valueList("key"); // builds a list of the values
@@ -271,39 +294,33 @@ The String s looks like this:
 
 	value.another.again
 	
-## Access to the environment variables and system properties
+## Access to the Environment Variables and System Properties
 
-The Env sugar provides a templating capacity and brings the environment variables into the scope of any
-properties file:
+The Env adapter provides a simple dynamic templating capacity and brings the environment variables 
+and System Properties into the scope of any properties file:
 
 	Properties props = ...;
 	props.put("dir", "My home dir is: ${user.dir}");
-	Env env = props.sugar().env();
+	Env env = Env.instance(props);
 	String dir = env.resolve("dir");
 	
-The value of the String "dir" will look something like this after the call to resolve():
+The value of "dir" will look something like this after the call to resolve():
 
     My home dir is: C:\Users\dave
     
 ## Quotes
 
-There is a sugar for adding quotation marks to values:
+For adding quotation marks to values:
 
     Properties props = ...;
 	 props.put("line", "This is a sentence.");
-	 Quote quote = props.sugar().quote();
+	 Quote quote = Quote.instance(props);
 	 String line = quote.curly("line");
 	 
 The value of the String "line" will look like this after the call to curly():
 
 	"This is a sentence." (not This is a sentence.)
 	
-
-## Pre-compiled Properties
-
-There is some work on this topic going on.
-
- 
 
 
 
