@@ -1,8 +1,8 @@
 # b2 (Bracket-Properties 2.3.0)
 
 Bracket Properties is a library to work with Java(tm) .properties files. It has many features missing from the 
-core implementation such as retention of order and UTF-8 support. If you can think of something you
-wish properties files could do better, chances are bracket-properties already has it. 
+core implementation such as retention of order and direct UTF-8 support without escapes. If you can think of 
+something you wish properties files could do better, chances are bracket-properties already has it. 
 
 This version is a complete rewrite and the API has changed quite a bit from 1.x. Requires Java 8+.
 
@@ -16,7 +16,7 @@ For maven, use:
 	    <version>2.3.0</version>
 	</dependency>
 	
-Source:
+Open Source:
 
     https://github.com/buttermilk-crypto/b2
 
@@ -27,25 +27,14 @@ Source:
 	Properties props = new InputAdapter().read(reader).props;
 	Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
    
-InputAdapter has many virtues, for example it can be additive to pull in multiple files:
+InputAdapter has many virtues, for example it can be additive to pull in multiple properties files:
    
-    new InputAdapter().readFile(file0, StandardCharsets.UTF_8).readFile(file1, StandardCharsets.UTF_8);
+    new InputAdapter()
+       .readFile(file0, StandardCharsets.UTF_8)
+       .readFile(file1, StandardCharsets.UTF_8)
+       .readFile(file2, StandardCharsets.US_ASCII);
 	
-Under the hood, InputAdapter calls the PropertiesParser class:
-
-	public void readFile(File path, Charset charset){
-		try (
-			FileInputStream in = new FileInputStream(path);
-			InputStreamReader reader = new InputStreamReader(in, charset);
-			BufferedReader breader = new BufferedReader(reader);
-			LineScanner scanner = new LineScanner(breader);
-		){
-			Properties p = new PropertiesParser(scanner).parse().getProperties();
-			props.merge(p);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+Under the hood, InputAdapter calls the PropertiesParser class. It uses a line-based scanner.
 	
 You can also instantiate Properties instances directly:
 	
@@ -54,7 +43,7 @@ You can also instantiate Properties instances directly:
 	props = Properties.instance();
 	props.put("key", "value");
 	
-There are several different types of back-ends available:
+There are several different types of back-ends available besides the default LinkedHashMap impl:
 
      props = Properties.concurrentInstance(); // thread-safe backed collection
     props = Properties.sortedInstance();     // for non-insert order
@@ -75,12 +64,12 @@ Some previous instantiation methods have been moved into the InputAdapter class:
 	
 ## Order Retention
 
-All Bracket Properties implementations have insertion order retention as the default, even in round tips to 
+All Bracket Properties class implementations have insertion order retention as the default, even in round tips to 
 files. This was one of the main reasons for implementing a new Properties package. There is also a 
-SortedPropertiesImpl which takes a Comparator<String> instance as input, for the case when you want
-to order the keys. This comes at the cost of a TreeMap. 
+SortedPropertiesImpl which takes a Comparator<String>, for the case when you want to order the keys. 
+This comes at the cost of a TreeMap. 
 
-Serialization is covered below. 
+Properties file serialization is covered below. 
 	
 	
 ## Underlying Data Model
@@ -190,6 +179,47 @@ there is also the simple
 	OutputAdapter.toString(props);
 
 which uses PlainOutputFormat.
+
+## UTF-8 Support
+
+One of the design decisions with java.util.Properties was to insist on the idea a .properties
+file was an ASCII-encoded file, even through Java has pretty good UTF-8 native support. In
+order to do internationalization, it was necessary to run any UTF-8 characters in properties
+files through a command-line utility called ascii2native.exe, which escapes them. The escapes
+are then decoded when java.util.Properties loads the file. 
+
+Bracket Properties provides support to read .properties files using either the UTF-8 escape
+approach (for backwards-compatibility) or by directly encoding .properties files, for example:
+
+UTF-8 encoded:
+
+    https://raw.githubusercontent.com/buttermilk-crypto/b2/master/bracket-properties/src/test/resources/icu4j/Arabic.out.properties
+
+ASCII encoded with escapes:
+
+    https://raw.githubusercontent.com/buttermilk-crypto/b2/master/bracket-properties/src/test/resources/icu4j/Arabic.out.ascii.properties
+
+Both of these files have identical data, and the same Bracket API will read either one, although it is necessary to have an idea about the charset encoded in the file for this to work:
+
+	   // read UTF-8 encoded file
+		InputAdapter ia = new InputAdapter();
+		String path = "src/test/resources/icu4j/Arabic.out.properties";
+		ia.readFile(new File(path), StandardCharsets.UTF_8); // tell it the charset
+		
+		Properties props = ia.props;
+		
+		// read ASCII unicode-escaped version 
+		ia = new InputAdapter();
+		path = "src/test/resources/icu4j/Arabic.out.ascii.properties";
+		ia.readFile(new File(path), StandardCharsets.ISO_8859_1); // tell it the charset
+		
+		Properties nProps = ia.props;
+		
+		// assert they are equal data
+		Assert.assertEquals(props.get("line0"), nProps.get("line0"));
+
+Note that the UTF-8 encoded file is 4086 bytes; the ASCII file with escapes is more than 12,000 bytes -
+a three-fold increase in size. 
  
 ## Easy Configuration Externalization 
 
