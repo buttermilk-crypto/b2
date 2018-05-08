@@ -103,5 +103,9 @@ public class Comment implements Serializable, Iterable<String> {
 	       throw new UnsupportedOperationException();
 	    }
 	}
+	
+	public boolean containsUnicodeEscape() {
+		return comments.contains("\\u");
+	}
 
 }

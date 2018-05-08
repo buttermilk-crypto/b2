@@ -5,7 +5,6 @@
  */
 package asia.redact.bracket.properties.io;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import asia.redact.bracket.properties.values.Comment;
@@ -20,27 +19,16 @@ import asia.redact.bracket.properties.values.Comment;
  */
 public class AsciiOutputFormat implements OutputFormat {
 
-	protected final static SimpleDateFormat dateFormatISO8601 = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
 	public AsciiOutputFormat() {
 		super();
 	}
 
 	public String formatContentType() {
-		 StringBuffer buf = new StringBuffer();
-		 buf.append(lineSeparator);
-		 buf.append("#;; charset=ISO-8859-1");
-		 buf.append(lineSeparator);
-		 return buf.toString();
+		return "";
 	}
 
 	public String formatHeader() {
-		StringBuffer buf = new StringBuffer("#;; generated=");
-		buf.append(dateFormatISO8601.format(new java.util.Date()));
-		buf.append(lineSeparator);
-		buf.append(lineSeparator);
-		return buf.toString();
+		return "";
 	}
 
 	public String format(String key, char separator, List<String> values, Comment comments) {
@@ -50,8 +38,8 @@ public class AsciiOutputFormat implements OutputFormat {
 
 		StringBuffer buf = new StringBuffer();
 		if (comments != null && comments.size() > 0) {
-			buf.append(new NativeToAsciiFilter().write(comments.comments)
-					.getResult());
+			buf.append(new NativeToAsciiFilter().write(comments.comments).getResult());
+			buf.append("\n");
 		}
 		StringBuilder keyBuilder = new StringBuilder();
 		for (int i = 0; i < key.length(); i++) {
@@ -81,10 +69,7 @@ public class AsciiOutputFormat implements OutputFormat {
 	}
 
 	public String formatFooter() {
-		StringBuffer buf = new StringBuffer(lineSeparator);
-		buf.append("#;; eof");
-		buf.append(lineSeparator);
-		return buf.toString();
+		return "";
 	}
 
 }

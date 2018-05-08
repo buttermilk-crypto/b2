@@ -58,6 +58,7 @@ public interface Properties {
 	public java.util.Properties asLegacy();
 	
 	// character encoding conversions
+	public boolean containsUnicodeEscape(); // indicates the presence somewhere of embedded unicode escapes
 	public Properties asciiToNative(); // return a new Properties instance and convert any ASCII escapes found to UTF-8
 	public Properties nativeToAscii(); // return a new Properties instance and concert all UTF-8 to ASCII escapes where required
 	

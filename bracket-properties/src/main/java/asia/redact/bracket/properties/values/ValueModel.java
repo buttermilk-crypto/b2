@@ -30,5 +30,10 @@ public interface ValueModel extends Serializable {
 	 */
 	public String getValue();
 	
+	/**
+	 * Support to see if we contain any unicode escapes
+	 * @return
+	 */
+	public boolean containsUnicodeEscape();
 
 }

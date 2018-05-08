@@ -93,4 +93,14 @@ public class Entry implements KeyValueModel, Serializable {
 		this.separator = separator;
 	}
 
+	@Override
+	public boolean containsUnicodeEscape() {
+		if(key.contains("\\u")) return true;
+		for(String val: values) {
+			if(val.contains("\\u")) return true;
+		}
+		if(comment != null && comment.containsUnicodeEscape()) return true;
+		return false;
+	}
+
 }

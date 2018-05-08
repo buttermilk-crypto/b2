@@ -1,22 +1,25 @@
-package asia.redact.bracket.icu;
+package asia.redact.bracket.properties.icu4j;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Test;
-
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
-public class MakeUnicodeData {
+/**
+ * Used to generate some comparison UTF-8 vs. escaped properties files
+ * 
+ * @author dave
+ *
+ */
+public class MakeUnicodeEscapedData {
 
 	private static int line_iter = 0;
 
@@ -27,7 +30,7 @@ public class MakeUnicodeData {
 			line_iter = 0;
 			CharsetDetector detector = new CharsetDetector();
 
-			try (FileInputStream in = new FileInputStream("src/test/resources/icu/" + fileNames[i]);
+			try (FileInputStream in = new FileInputStream("src/test/resources/icu4j/" + fileNames[i]);
 					BufferedInputStream bin = new BufferedInputStream(in);) {
 
 				detector.setText(bin);
@@ -40,10 +43,10 @@ public class MakeUnicodeData {
 				e.printStackTrace();
 			}
 
-			try (FileInputStream in = new FileInputStream("src/test/resources/icu/"+fileNames[i]);
+			try (FileInputStream in = new FileInputStream("src/test/resources/icu4j/"+fileNames[i]);
 					InputStreamReader bin = new InputStreamReader(in, StandardCharsets.UTF_8);
 					BufferedReader breader = new BufferedReader(bin);
-					FileOutputStream out = new FileOutputStream("src/test/resources/icu/"+fileNames[i]+".out.properties");
+					FileOutputStream out = new FileOutputStream("src/test/resources/icu4j/"+fileNames[i]+".out.properties");
 					OutputStreamWriter wout = new OutputStreamWriter(out);
 					BufferedWriter bw = new BufferedWriter(wout);
 
@@ -81,8 +84,8 @@ public class MakeUnicodeData {
 
 	}
 
-	@Test
-	public void test0() {
+	
+	public void create() {
 
 		String [] fileNames = { "Arabic", "Chinese", "Hindi", "Latin" };
 		this.gen(fileNames);

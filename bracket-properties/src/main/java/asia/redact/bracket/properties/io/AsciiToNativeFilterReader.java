@@ -11,7 +11,8 @@ import java.io.Reader;
 
 /**
  * <p>
- * Rework of the Sun open source code - read higher than ASCII characters.
+ * Rework of the Sun open source code - read higher than ASCII characters 
+ * and convert them into UTF-8 
  * </p>
  * 
  * @author dave

@@ -41,9 +41,11 @@ public class HeaderFooterOutputFormat implements OutputFormat {
 	public String format(String key, char separator, List<String> values, Comment comments) {
 		
 		if(key == null) throw new RuntimeException("Key cannot be null in a format");
+		
 		StringBuffer buf = new StringBuffer();
 		if(comments != null && comments.size()>0) {
 			buf.append(comments.comments);
+			buf.append("\n");
 		}
 	    StringBuilder keyBuilder=new StringBuilder();
 	    for(int i=0;i<key.length();i++){

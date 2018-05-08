@@ -6,6 +6,8 @@
 package asia.redact.bracket.properties.io;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,17 +39,6 @@ import asia.redact.bracket.properties.line.LineScanner;
 /**
  * <p>Adapter for reading properties files.</p>
  * 
- * <pre>
- * 
- *  Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
- *  
- *  can be additive:
- *  
- *  new InputAdapter().readFile(file0, StandardCharsets.UTF_8).readFile(file1, StandardCharsets.UTF_8);
- * 
- * 
- * </pre>
- * 
  * @author dave
  *
  */
@@ -68,18 +59,48 @@ public class InputAdapter {
 		this.props = props;
 	}
 	
+	/**
+	 * Read in a file in .properties format. Auto-expands unicode escapes if those are found
+	 * 
+	 * @param path
+	 * @param charset
+	 */
 	public void readFile(File path, Charset charset){
-		try (
-			FileInputStream in = new FileInputStream(path);
-			InputStreamReader reader = new InputStreamReader(in, charset);
-			BufferedReader breader = new BufferedReader(reader);
-			LineScanner scanner = new LineScanner(breader);
-		){
-			Properties p = new PropertiesParser(scanner).parse().getProperties();
-			props.merge(p);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		
+		
+		// if ascii, apply the filter for unicode escapes
+		if(charset.displayName().equals("ISO-8859-1") || charset.displayName().equals("US-ASCII")) {
+			try (
+					FileInputStream in = new FileInputStream(path);
+					InputStreamReader reader = new InputStreamReader(in, charset);
+					AsciiToNativeFilterReader filter = new AsciiToNativeFilterReader(reader);
+					BufferedReader breader = new BufferedReader(filter);
+					LineScanner scanner = new LineScanner(breader);
+				){
+					Properties p = new PropertiesParser(scanner).parse().getProperties();
+					props.merge(p);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			
+		} else {
+			
+			try (
+					FileInputStream in = new FileInputStream(path);
+					InputStreamReader reader = new InputStreamReader(in, charset);
+					BufferedReader breader = new BufferedReader(reader);
+					LineScanner scanner = new LineScanner(breader);
+				){
+					Properties p = new PropertiesParser(scanner).parse().getProperties();
+					props.merge(p);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			
 		}
+		
+		
+		
 	}
 	
 	/**
@@ -107,15 +128,20 @@ public class InputAdapter {
 	}
 	
 	/**
-	 * Read in from a given URL. Throws a RuntimeException on IOExceptions.
+	 * Read in from a given URL which is assumed may contain unicode escapes. 
+	 * 
+	 * Throws a RuntimeException on IOExceptions. 
 	 * 
 	 * @param url
+	 * 
 	 */
 	public void readURL(URL url) {
+		
 		try (
 				InputStream in = url.openStream();
 				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-				BufferedReader breader = new BufferedReader(reader);
+				AsciiToNativeFilterReader filter = new AsciiToNativeFilterReader(reader);
+				BufferedReader breader = new BufferedReader(filter);
 				LineScanner scanner = new LineScanner(breader);
 		){
 			Properties p = new PropertiesParser(scanner).parse().getProperties();
@@ -126,13 +152,15 @@ public class InputAdapter {
 	}
 	
 	/**
-	 * Read in a standard (i.e., legacy) properties formatted file.
+	 * Read in a standard (i.e., legacy) properties formatted input stream assumed to possibly contain
+	 *  unicode escapes.
 	 *  
 	 * @param reader
 	 */
 	public void read(Reader reader){
 		try (
-		 LineScanner scanner = new LineScanner(reader);
+		 AsciiToNativeFilterReader filter = new AsciiToNativeFilterReader(reader);
+		 LineScanner scanner = new LineScanner(filter);
 		){
 			Properties p = new PropertiesParser(scanner).parse().getProperties();
 			props.merge(p);
@@ -141,33 +169,36 @@ public class InputAdapter {
 		}
 	}
 	
+	
+	
 	/**
-	 * Read in from a stream encoded using the (legacy) Sun DTD.
+	 * Read in from a stream encoded using the (legacy) properties Sun DTD. Passes the stream
+	 * through the AsciiToNativeFilter
 	 * 
 	 * @param reader
 	 */
 	public void readXML(Reader reader){
-		   SAXParserFactory factory = SAXParserFactory.newInstance();
-		   factory.setValidating(false);
-	        SAXParser parser;
-			try {
-				parser = factory.newSAXParser();
-				InputSource source = new InputSource(reader);
-			    parser.parse(source, new BracketPropertiesSAXHandler(props));
-			} catch (Exception x){
-				x.printStackTrace();
-				throw new RuntimeException("Parsing properties failed: "+x.getMessage());
-			}
+		readXML(reader, false);
 	}
 	
+	/**
+	 * Read in from a stream encoded using the (legacy) properties Sun DTD. Passes the stream
+	 * on read through the AsciiToNativeFilter
+	 * 
+	 * @param reader
+	 * @param validate - if true, use the DTD for validation, throw RuntimeException if fails
+	 */
 	public void readXML(Reader reader, boolean validate){
 		   SAXParserFactory factory = SAXParserFactory.newInstance();
 		   factory.setValidating(validate);
 	        SAXParser parser;
-			try {
+			try (
+				AsciiToNativeFilterReader a_reader = new AsciiToNativeFilterReader(reader);
+			){
 				parser = factory.newSAXParser();
-				InputSource source = new InputSource(reader);
+				InputSource source = new InputSource(a_reader);
 			    parser.parse(source, new BracketPropertiesSAXHandler(props));
+			   
 			} catch (Exception x){
 				x.printStackTrace();
 				throw new RuntimeException("Parsing properties failed: "+x.getMessage());
@@ -175,14 +206,16 @@ public class InputAdapter {
 	}
 	
 	/**
-	 * Read in from a JSON-encoded stream.
+	 * Read in from a JSON-encoded stream. Unicode escapes are processed if found
 	 *  
 	 * @param in
 	 */
 	public void readJSON(Reader in){
 		JsonValue root;
-		try {
-			root = Json.parse(in);
+		try (
+			AsciiToNativeFilterReader a_reader = new AsciiToNativeFilterReader(in);
+		){
+			root = Json.parse(a_reader);
 			JsonObject obj = root.asObject();
 			obj.forEach(item-> {
 				props.put(item.getName(), item.getValue().asString());

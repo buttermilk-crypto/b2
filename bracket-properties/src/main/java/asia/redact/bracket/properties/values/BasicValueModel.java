@@ -159,5 +159,16 @@ public class BasicValueModel implements ValueModel, Serializable {
 	public String toString(){
 		return getValue();
 	}
+
+	@Override
+	public boolean containsUnicodeEscape() {
+	
+		for(String val: values) {
+			if(val.contains("\\u")) return true;
+		}
+		if(comments != null && comments.containsUnicodeEscape()) return true;
+		
+		return false;
+	}
 	
 }

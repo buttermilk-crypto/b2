@@ -10,8 +10,8 @@ import java.io.Reader;
 import java.io.Serializable;
 
 /**
- * <p>This class source code was originally taken from <b>Apache Harmony</b> project. The 
- * source-code is no longer online.</p>
+ * <p>This class's original source code was taken from <b>Apache Harmony</b> project. That
+ * source-code repo is no longer online.</p>
  *  
  * <p>Read a properties file line-by-line using line().</p>
  * 
@@ -146,7 +146,7 @@ public class LineScanner extends Reader {
             throws IOException {
         synchronized (lock) {
             if (isClosed()) {
-                throw new IOException(""); //$NON-NLS-1$
+                throw new IOException("");
             }
             if (offset < 0 || offset > buffer.length - length
                     || length < 0) {
@@ -212,10 +212,9 @@ public class LineScanner extends Reader {
     }
 
     /**
-     * This is the interface into the parser, don't use the other methods (the ones from Reader).
-     *
+     * This is the interface into the parser, don't use the other public methods (the obligatory ones from Reader).
      * 
-     * @return
+     * @return a Line object encapsulating a line
      */
     public Line line(){
     	 synchronized (lock) {

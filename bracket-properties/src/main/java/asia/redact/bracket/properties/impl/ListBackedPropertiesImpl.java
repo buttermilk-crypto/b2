@@ -344,5 +344,13 @@ public class ListBackedPropertiesImpl implements Properties, Serializable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public boolean containsUnicodeEscape() {
+		 for(KeyValueModel model: list){
+			if(model.containsUnicodeEscape()) return true;
+		}
+		return false;
+	}
+
 
 }

@@ -315,4 +315,15 @@ public class PropertiesImpl extends AbstractMapDerivedPropertiesBase implements
 		return false;
 	}
 
+	@Override
+	public boolean containsUnicodeEscape() {
+		for(Map.Entry<String,ValueModel> entry: this.map.entrySet()){
+			if(entry.getKey().contains("\\u")) return true;
+			if( entry.getValue().containsUnicodeEscape() ) return true;
+		}
+		return false;
+	}
+
+
+
 }
