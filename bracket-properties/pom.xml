@@ -24,8 +24,8 @@
 		</dependency>
 
 		<!-- these are compile time dependencies if you are building compiled Properties 
-			classes. They are not required at runtime at all. There does not seem
-			to be a maven scope which means "only at compile time" -->
+			classes. They are not required at runtime at all. There does not seem to 
+			be a maven scope which means "only at compile time" -->
 		<dependency>
 			<groupId>com.squareup</groupId>
 			<artifactId>javapoet</artifactId>
@@ -38,15 +38,10 @@
 			<version>3.4</version>
 		</dependency>
 
-        <!--  experimental - for internationalization support -->
+		<!-- experimental - for internationalization support -->
 		<!-- https://mvnrepository.com/artifact/com.ibm.icu/icu4j -->
-		<!--  
-		<dependency>
-			<groupId>com.ibm.icu</groupId>
-			<artifactId>icu4j</artifactId>
-			<version>61.1</version>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>com.ibm.icu</groupId> <artifactId>icu4j</artifactId> 
+			<version>61.1</version> </dependency> -->
 
 
 	</dependencies>
@@ -66,9 +61,20 @@
 				</configuration>
 			</plugin>
 
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId> 
-				<version>1.6</version> <executions> <execution> <id>sign-artifacts</id> <phase>verify</phase> 
-				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 
 			<plugin>

@@ -30,9 +30,9 @@ public class SortedPropertiesImpl extends PropertiesImpl implements Serializable
 
 	private static final long serialVersionUID = 1L;
 	
-	private Comparator<String> comparator;
+	private Comparator<CharSequence> comparator;
 
-	public SortedPropertiesImpl(boolean concurrent, Comparator<String> comparator) {
+	public SortedPropertiesImpl(boolean concurrent, Comparator<CharSequence> comparator) {
 		super(concurrent);
 		this.comparator = comparator;
 	}

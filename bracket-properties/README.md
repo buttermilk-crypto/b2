@@ -23,6 +23,11 @@ Open Source:
 
 ## Instantiation
 
+Bracket Properties implement the Properties interface and have Impl classes, as one would expect. 
+There is also an I/O package (as you would expect). The most important classes in the I/O package
+are the InputAdapter and the OutputAdapter. Use InputAdapter to load properties from different
+inputs. 
+
 	// Get properties from various I/O input sources
 	Properties props = new InputAdapter().read(reader).props;
 	Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
@@ -36,7 +41,7 @@ InputAdapter has many virtues, for example it can be additive to pull in multipl
 	
 Under the hood, InputAdapter calls the PropertiesParser class. It uses a line-based scanner.
 	
-You can also instantiate Properties instances directly:
+You can also instantiate Properties instances directly using the factory methods:
 	
 	Properties props; // interface asia.redact.bracket.properties.Properties
 		

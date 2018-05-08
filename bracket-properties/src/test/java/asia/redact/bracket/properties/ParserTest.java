@@ -87,11 +87,14 @@ public class ParserTest {
 			) {
 				
 				Properties props = new PropertiesParser(scanner).parse(
-						new Comparator<String>() {
+						new Comparator<CharSequence>() {
+
 							@Override
-							public int compare(String o1, String o2) {
-								return o1.compareTo(o2);
+							public int compare(CharSequence o1, CharSequence o2) {
+								
+								return o1.toString().compareTo(o2.toString());
 							}
+							
 						}
 				).getProperties();
 				

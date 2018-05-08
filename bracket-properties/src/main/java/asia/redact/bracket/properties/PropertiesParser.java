@@ -79,7 +79,7 @@ public class PropertiesParser {
 	 * @param comparator
 	 * @return
 	 */
-	public PropertiesParser parse(Comparator<String> comparator) {
+	public PropertiesParser parse(Comparator<CharSequence> comparator) {
 		
 		props = new SortedPropertiesImpl(concurrent, comparator).init();
 		

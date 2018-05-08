@@ -16,7 +16,14 @@ import asia.redact.bracket.properties.impl.SortedPropertiesImpl;
 import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;
+import se.sawano.java.text.AlphanumericComparator;
 
+/**
+ * The Properties interface.
+ * 
+ * @author dave
+ * @see PropertiesImpl
+ */
 public interface Properties {
 
 	//basic accessors
@@ -68,27 +75,37 @@ public interface Properties {
 	public String toYAML();
 	public String toString();
 	
+	/**
+	 * Factory method to return a Properties instance
+	 * @return
+	 */
 	public static Properties instance() {
 		return new PropertiesImpl().init();
 	}
 	
+	/**
+	 * Factory method to return a thread-safe Properties instance
+	 * @return
+	 */
 	public static Properties concurrentInstance() {
 		return new PropertiesImpl(true).init();
 	}
 	
+	/**
+	 * Factory method to return a list-backed (not Map-backed) instance
+	 * @return
+	 */
 	public static Properties listInstance() {
 		return new ListBackedPropertiesImpl();
 	}
 	
+	/**
+	 * Factory method to return a sorted instance, in this case a fancy Alphanumeric sort using
+	 * <a href="https://github.com/sawano/alphanumeric-comparator">se.sawano.java.text.AlphanumericComparator</a>
+	 * @return
+	 */
 	public static Properties sortedInstance() {
-		return new SortedPropertiesImpl(false, new Comparator<String>() {
-
-			@Override
-			public int compare(String o1, String o2) {
-				return o1.compareTo(o2);
-			}
-			
-		});
+		return new SortedPropertiesImpl(false, new AlphanumericComparator());
 	}
 	
 	

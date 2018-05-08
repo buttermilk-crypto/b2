@@ -9,6 +9,12 @@ import java.util.List;
 
 import asia.redact.bracket.properties.Properties;
 
+/**
+ * Support for the "dot" idiom, which is commonly found in properties files. 
+ * 
+ * @author dave
+ *
+ */
 public interface Dot {
 	
 	/**
@@ -68,18 +74,31 @@ public interface Dot {
 	 */
 	public List<String> valueList(String keyBase);
 	
+	/**
+	 * Create a delimited list of the keyset
+	 * 
+	 * @param keyBase
+	 * @param delim
+	 * @return
+	 */
 	public String delimitedList(String keyBase, String delim);
-	public String dotList(String keyBase); // the above with dots
+	
+	public String dotList(String keyBase);
 	
 	/**
-	 * Generate a classpath appropriate to this OS using values formatted as above
+	 * Generate a classpath appropriate to this OS using values formatted as a delimited list.
 	 * 
 	 * @param keyBase
 	 * @return
 	 */
 	public String generateClasspath(String keyBase);
 	
-	
+	/**
+	 * Insert a list of values with automatic indexing
+	 * 
+	 * @param keyBase
+	 * @param items
+	 */
 	public void putList(String keyBase, List<?> items);
 	
 	

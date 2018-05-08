@@ -17,18 +17,37 @@ import asia.redact.bracket.properties.Properties;
 public interface Sec {
 
 	// simple obfuscation
+	
+	/**
+	 * Obfuscate the value of the given key.
+	 * @param key
+	 */
 	public void obfuscate(String key);
+	
+	/**
+	 * Deobfuscate the value of a given key. It can then be accessed in the normal way
+	 * @param key
+	 */
 	public void deobfuscate(String key);
+	
+	/**
+	 * Deobfuscate and return a char buffer as used in password APIs.
+	 * @param key
+	 * @return
+	 */
 	public char[] deobfuscateToChar(String key);
 	
-	// encryption - for this to work you must set a password using the correct constructor. 
-	// Client must retain the password value, there is no recovery option
+	/** encryption - for this to work you must set a password using the correct constructor. 
+	 *  Client must retain the password value, there is no recovery option
+	 * @param key
+	 */
 	public void encrypt(String key);
+	
 	public void decrypt(String key);
 	public char[] decryptToChar(String key);
 	
 	/**
-	 * Use this for obfuscation
+	 * Use this factory method for obfuscation
 	 * 
 	 * @param props
 	 * @return
@@ -38,7 +57,7 @@ public interface Sec {
 	}
 	
 	/**
-	 * Use this for password-based encryption
+	 * Use this factory method for password-based encryption
 	 * 
 	 * @param props
 	 * @param password
