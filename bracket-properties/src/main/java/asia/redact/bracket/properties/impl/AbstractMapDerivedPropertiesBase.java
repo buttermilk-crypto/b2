@@ -52,7 +52,10 @@ public abstract class AbstractMapDerivedPropertiesBase implements Serializable {
 	}
 
 	public boolean containsValue(String value) {
-		return map.containsValue(value);
+		for(Map.Entry<String,ValueModel> e: map.entrySet()) {
+			if(e.getValue().getValue().equals(value)) return true;
+		}
+		return false;
 	}
 
 	public Object remove(String key) {
