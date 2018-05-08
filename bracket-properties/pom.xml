@@ -24,7 +24,8 @@
 		</dependency>
 
 		<!-- these are compile time dependencies if you are building compiled Properties 
-			classes. They are not required at runtime at all. -->
+			classes. They are not required at runtime at all. There does not seem
+			to be a maven scope which means "only at compile time" -->
 		<dependency>
 			<groupId>com.squareup</groupId>
 			<artifactId>javapoet</artifactId>
@@ -39,11 +40,13 @@
 
         <!--  experimental - for internationalization support -->
 		<!-- https://mvnrepository.com/artifact/com.ibm.icu/icu4j -->
+		<!--  
 		<dependency>
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 			<version>61.1</version>
 		</dependency>
+		-->
 
 
 	</dependencies>
