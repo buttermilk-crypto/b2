@@ -1,35 +1,93 @@
 # b2 (Bracket-Properties 2.0 - Compiled Properties Subproject)
 
-Bracket Properties is a library to work with java(tm) .properties files. It has many features missing from the 
-core java(tm) implementation such as retention of order and UTF-8 support. If you can think of something you
-wish java(tm) properties files could do better, chances are bracket-properties already has it. 
-
-This subproject is focused on the idea of pre-compiled configurations. It contains a maven plugin which can do
-source code generation to build pre-compiled classes containing properties data. No need to load the config from a file!
+This subproject is focused on the idea of pre-compiled configurations. It builds a maven plugin which can do
+source code generation for pre-compiled classes containing properties data. No need to load the config from a file!
 
 The mojo output has one runtime dependency, which is bracket properties 2.0 or better. It also requires maven 3 and Java 8.
+
+## What It Is
+
+To motivate the idea of pre-compiled properties, think about the scenario in which you have a large, complex,
+late-loading application (e.g., Spring) which is having difficulty getting a consistent set of configurations
+loaded. This actually happened to me on a job. Compiled properties solves this problem by making the issue
+of late-loading moot: it is impossible to screw things up because the configuration is compile-time rather
+than run-time. 
+
+Another use-case for pre-compiled properties is when you want to obfuscate or encrypt the configuration (or
+parts of it) or you just want the configuration out of sight.  
+
+## PropertiesImpl vs. PojoPropertiesImpl
+
+The Mojo provides two options for superclass: PropertiesImpl and PojoPropertiesImpl. The PropertiesImpl subclass
+will be backed by a LinkedHashMap (the default). But the PojoPropertiesImpl subclass will be a true pojo
+with code like this:
+
+    public final class CArabicPojo extends PojoPropertiesImpl {
+
+      public static final long serialVersionUID = 1;
+
+      public final Entry line0 = new Entry("line0", 
+                    new Comment("# An optional comment"), 
+                    "The value of the property (can be multi-line)"
+                  );
+      public final Entry line1 = new Entry("line1", new Comment("# An optional comment"), "A second value");
+      
+      public final Entry line2 = ...
+  
+    }
+
+The name of the instance variable will be the key from the input properties. They key will be munged if required but of course
+you should try to use keys which help your cause. 
+
+Additionally the Pojo has a built-in array of references to the keys for easy iteration:
+
+    entries = new Entry[7];
+    entries[0] = line0;
+    entries[1] = line1;
+    entries[2] = line2;
+    ...
+
+
 
 ## Get It
 
 Use this in your pom.xml file and fix up as required:
 
 	<build>
+	
+	   <dependencies>
+	     	<dependency>
+			   <groupId>asia.redact.bracket.properties</groupId>
+			   <artifactId>bracket-properties</artifactId>
+			   <version>2.3.0</version>
+		   </dependency>
+	   </dependencies>
+	   
+	   [...]
+	
 		<plugins>
 
 			<plugin>
 				<groupId>asia.redact.bracket.properties</groupId>
 				<artifactId>pcompiler-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1</version>
 
-             <!-- defaults, change these to match your desired targets -->
+             <!-- defaults as below, change these to match your desired targets -->
 				<configuration>
 					<targetPackage>com.example</targetPackage>
-					<targetClassname>CProperties</targetClassname>
+					<targetClassname>CompiledProperties</targetClassname>
+					
+					<!-- where your input properties file is -->
 					<inputProperties>${basedir}/src/main/resources/input.properties</inputProperties>
+					
+					<!-- if this is set to ISO-8859-1, the input is assumed to be a 
+					  legacy Properties file with unicode escapes, which we will parse out -->
+					<charsetName>UTF-8</charsetName>
 					
 					<!-- two possibilities here, choose one -->
 					<baseClass>PojoPropertiesImpl</baseClass>
 					<!-- <baseClass>PropertiesImpl</baseClass> -->
+					
 				</configuration>
 
 				<executions>
@@ -68,6 +126,7 @@ You can examine the source code which was generated in target/src-generated. If 
 
       public CProperties() {
         super(true);
+        init();
       }
 
     public Properties init() {
@@ -119,23 +178,26 @@ For the PojoPropertiesImpl option, the output will look like this:
 
 To use the class you will instantiate it directly. Assuming your class name is CProperties and you are extending PropertiesImpl, you would do this:
 
-    Properties props = new CProperties().init();
+    Properties props = new CProperties();
     
 for the PojoPropertiesImpl option, the constructor is similar:
 
-    Properties props = new CPropertiesPojo().init();
+    Properties props = new CPropertiesPojo();
     
-Or you can use it like this:
+As of version 1.0.1, the init() call is made within the constructor for you. Note that these classes are marked final. 
+    
+You can use it like this:
 
-     CPropertiesPojo pojo = new CPropertiesPojo().init();
-     String value = pojo.key0.getValue();
-     Assert.assertEquals(pojo.get("key.0"), value);
+     CPropertiesPojo pojo = new CPropertiesPojo();
+     
+     String value = pojo.key0.getValue(); // instance variable
+     String value1 = pojo.get("key0");    // Properties interface
+     
+     Assert.assertEquals(value, value1);
 
-All of the Properties interface methods are available, as are the sugars. 
+All of the Properties interface methods are available, as are the other classes in the Bracket packages. 
 
-One of the main uses of pre-compiled properties is to not have the issue of late binding on configurations which need to be read from files. This helps prevent any question about inconsistent configurations.
 
-You might say that you can just include any strings or values you need as static variables, but pre-compiled properties have all the advantages of the Properties Interface and associated classes found in bracket-properties for formatting and so on.
 
  
 

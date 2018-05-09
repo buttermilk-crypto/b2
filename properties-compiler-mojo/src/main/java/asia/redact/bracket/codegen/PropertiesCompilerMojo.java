@@ -5,11 +5,9 @@
  */
 package asia.redact.bracket.codegen;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -24,6 +22,12 @@ import org.apache.maven.project.MavenProject;
 import asia.redact.bracket.properties.Properties;
 import asia.redact.bracket.properties.io.InputAdapter;
 
+/**
+ * Properties compiler. 
+ * 
+ * @author dave
+ *
+ */
 
 @Mojo( name = "pcompiler", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class PropertiesCompilerMojo extends AbstractMojo {
@@ -31,14 +35,28 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 	@Parameter( property = "pcompiler.inputProperties", defaultValue = "${basedir}/src/main/resources/input.properties" )
 	private String inputProperties;
 	
+	/**
+	 * If this is set to US-ASCII or ISO-8859-1, then unicode escapes will be looked for and parsed
+	 */
+	@Parameter( property = "pcompiler.charsetName", defaultValue = "UTF-8" )
+	private String charsetName;
+	
+	/**
+	 * Set this to an appropriate package for your code base
+	 */
 	@Parameter( property = "pcompiler.targetPackage", defaultValue = "com.example" )
 	private String targetPackage;
 	
+	/**
+	 * Set this to something appropriate to your project
+	 */
 	@Parameter( property = "pcompiler.targetClassname", defaultValue = "CompiledProperties" )
 	private String targetClassname;
 	
-	// must be one of PropertiesImpl or PojoPropertiesImpl
-	@Parameter( property = "pcompiler.baseClass", defaultValue = "PropertiesImpl" )
+	/**
+	 * This must be one of PropertiesImpl or PojoPropertiesImpl
+	 */
+	@Parameter( property = "pcompiler.baseClass", defaultValue = "PojoPropertiesImpl" )
 	private String baseClass;
 	
 	@Parameter(property = "pcompiler.project", defaultValue = "${project}")
@@ -47,10 +65,14 @@ public class PropertiesCompilerMojo extends AbstractMojo {
     @Parameter(property="pcompiler.outputDir", defaultValue="${project.build.directory}/src-generated")
 	private File outputDir;
 
-	public PropertiesCompilerMojo() {}
+	public PropertiesCompilerMojo() {
+		getLog().info( "initializing the PropertiesCompilerMojo...");
+	}
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		
+		Charset charset = Charset.forName(charsetName);
 		
 		getLog().info( "baseClass:"+baseClass);
 		getLog().info( "target class:"+targetPackage+"."+targetClassname);
@@ -63,13 +85,9 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 			try {
 				throw new MojoExecutionException("input properties not found: "+f.getCanonicalPath());
 			} catch (IOException e) {}
+		
 		InputAdapter in = new InputAdapter();
-		try (
-				FileInputStream inStream = new FileInputStream(f);
-				InputStreamReader reader = new InputStreamReader(inStream, StandardCharsets.US_ASCII);
-				BufferedReader breader = new BufferedReader(reader);
-		) {
-		in.read(breader);
+		in.readFile(f, charset);
 			
 		  switch(baseClass){
 			case "PropertiesImpl": this.executePropertiesImpl(in.props); break;
@@ -78,10 +96,6 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 				throw new MojoExecutionException("baseClass must be set to one of: PojoPropertiesImpl or PropertiesImpl");
 			}
 		 }
-		  
-		}catch(IOException x){
-			getLog().error(x);
-		}
 		
 		getLog().info("Adding " + outputDir.getAbsolutePath() + " to compile source root");
 		project.addCompileSourceRoot(outputDir.getAbsolutePath());
@@ -92,12 +106,14 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 		CompiledPropsGenerator gen = new CompiledPropsGenerator(props);
 		String claZZ = gen.generatePropertiesImpl(targetPackage, targetClassname);
 		write(claZZ);
+		getLog().info("Wrote "+claZZ.length()+" chars");
 	}
 	
 	void executePojoPropertiesImpl(Properties props) throws MojoExecutionException, MojoFailureException {
 		CompiledPropsGenerator gen = new CompiledPropsGenerator(props);
 		String claZZ = gen.generatePojoPropertiesImpl(targetPackage, targetClassname);
 		write(claZZ);
+		getLog().info("Wrote "+claZZ.length()+" chars");
 	}
 	
 	// supporting methods
@@ -166,5 +182,15 @@ public class PropertiesCompilerMojo extends AbstractMojo {
 	public void setBaseClass(String baseClass) {
 		this.baseClass = baseClass;
 	}
+
+	public String getCharsetName() {
+		return charsetName;
+	}
+
+	public void setCharsetName(String charsetName) {
+		this.charsetName = charsetName;
+	}
+	
+	
 	
 }

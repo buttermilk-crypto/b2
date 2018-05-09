@@ -22,7 +22,7 @@ import asia.redact.bracket.properties.values.KeyValueModel;
 import asia.redact.bracket.properties.values.ValueModel;
 
 /**
- * An array-backed implementation. This is used as a base class for source-code generated subclasses.
+ * An array-backed implementation abstract base class. This is used as a base class for source-code generated subclasses.
  * 
  * @author Dave
  *
@@ -352,5 +352,12 @@ public abstract class PojoPropertiesImpl implements Properties, Serializable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public boolean containsUnicodeEscape() {
+		 for(Entry model: entries){
+			if(model.containsUnicodeEscape()) return true;
+		}
+		return false;
+	}
 
 }

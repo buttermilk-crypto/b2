@@ -28,6 +28,12 @@ import asia.redact.bracket.properties.values.Comment;
 import asia.redact.bracket.properties.values.Entry;
 import asia.redact.bracket.properties.values.ValueModel;
 
+/**
+ * Use JavaPoet to create some java source code. 
+ * 
+ * @author dave
+ *
+ */
 public class CompiledPropsGenerator {
 
 	final Properties input;
@@ -36,8 +42,17 @@ public class CompiledPropsGenerator {
 		this.input = input;
 	}
 	
+	/**
+	 * Create source code for a PojoPropertiesImpl subclass
+	 * 
+	 * @param packageName user-supplied package name
+	 * @param simpleName user-supplied class name for the output
+	 * 
+	 * @return 
+	 */
 	public String generatePojoPropertiesImpl(String packageName, String simpleName) {
 
+		// our interface
 		ClassName propsClass = ClassName.get("asia.redact.bracket.properties","Properties");
 		
 		// our abstract base class
@@ -53,6 +68,7 @@ public class CompiledPropsGenerator {
 		MethodSpec cstr = MethodSpec.constructorBuilder()
 				.addModifiers(Modifier.PUBLIC)
 				.addStatement("super()")
+				.addStatement("init()")
 				.build();
 
 		// here is our input data
@@ -127,6 +143,14 @@ public class CompiledPropsGenerator {
 		return writer.toString();
 	}
 
+	/**
+	 * Create source code for a PropertiesImpl subclass
+	 * 
+	 * @param packageName user-supplied package name
+	 * @param simpleName user-supplied class name for the output
+	 * 
+	 * @return 
+	 */
 	public String generatePropertiesImpl(String packageName, String simpleName) {
 
 		ClassName propsClass = ClassName.get("asia.redact.bracket.properties","Properties");
@@ -140,6 +164,7 @@ public class CompiledPropsGenerator {
 		MethodSpec cstr = MethodSpec.constructorBuilder()
 				.addModifiers(Modifier.PUBLIC)
 				.addStatement("super(true)")
+				.addStatement("init()")
 				.build();
 
 		// init method
@@ -204,7 +229,12 @@ public class CompiledPropsGenerator {
 
 		for (int i = 0; i < values.size(); i++) {
 			buf.append('\"');
-			buf.append(escape(values.get(i)));
+			
+		// certain values might need escaping - TODO, provide a flag
+		//	buf.append(escape(values.get(i)));
+			buf.append(values.get(i));
+			
+			
 			buf.append('\"');
 			buf.append(',');
 		}
