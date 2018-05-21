@@ -16,28 +16,34 @@ For maven, use:
 	    <version>2.3.0</version>
 	</dependency>
 	
-Open Source:
+Open Source repo:
 
     https://github.com/buttermilk-crypto/b2
 
 
 ## Instantiation
 
-Bracket Properties implement the Properties interface and have Impl classes, as one would expect. 
-There is also an I/O package (as you would expect). The most important classes in the I/O package
-are the InputAdapter and the OutputAdapter. Use InputAdapter to load properties from different
-inputs. 
+Bracket Properties implement the Properties interface and have Impl classes, as one would expect
+from any java package. There is also an I/O package (again, as you would expect). The most important 
+classes in the I/O package are the InputAdapter and the OutputAdapter. Use InputAdapter to load 
+properties from different inputs. 
 
 	// Get properties from various I/O input sources
 	Properties props = new InputAdapter().read(reader).props;
 	Properties props = new InputAdapter().readFile(file, StandardCharsets.UTF_8).props;
    
-InputAdapter has many virtues, for example it can be additive to pull in multiple properties files:
+InputAdapter has many virtues, for example it can pull in multiple properties files:
    
     new InputAdapter()
        .readFile(file0, StandardCharsets.UTF_8)
        .readFile(file1, StandardCharsets.UTF_8)
        .readFile(file2, StandardCharsets.US_ASCII);
+       
+UTF-8 support is managed by the charset which is passed in. If the properties file is
+in the legacy format with Unicode escape sequences, then using US-ASCII or ISO-8859-1 in
+conjunction with readFile() will correctly parse those. If UTF-8 is specified, the
+properties file is assumed to have UTF-8 characters (escapes will not be processed 
+during the parsing phase). More on this below. 
 	
 Under the hood, InputAdapter calls the PropertiesParser class. It uses a line-based scanner.
 	
@@ -66,11 +72,25 @@ Some previous instantiation methods have been moved into the InputAdapter class:
 	...
 	Properties props = new InputAdapter().readMap(map);
 	
+InputAdapter instances are not intended to be reused. They keep an internal Properties instance 
+which is marked as final. They also have an instance variable which remembers where the file
+was and its charset as a convenience for later updates to that file:
+
+    InputAdapter in = new InputAdapter;
+    in.readFile(path, charset); // sets path and charset. and reads the file contents into in.props
+    Properties props = in.props;
+
+    ... // do some updates to that properties instance
+
+    // now update the file to keep it in sync with your changes
+    OutputAdapter out = new OutputAdapter(props);
+    out.writeFile(in.getCurrentFile(), in.getCurrentCharset());
+
 	
 ## Order Retention
 
 All Bracket Properties class implementations have insertion order retention as the default, even in round tips to 
-files. This was one of the main reasons for implementing a new Properties package. There is also a 
+files. This was one of the main reasons for implementing a new Properties package. The exception to this rule is
 SortedPropertiesImpl which takes a Comparator<String>, for the case when you want to order the keys. 
 This comes at the cost of a TreeMap. 
 
@@ -127,7 +147,7 @@ Comments are retained and can be re-serialized as expected in most cases. The in
 
 ## Accessors Support
  
- Basic accessor support is via the Properties interface:
+ Basic accessor support is via the Properties interface, more is available through the Types adapter
  
     public String get(String key);
 	public String get(String key, String defaultVal);
@@ -152,6 +172,8 @@ Comments are retained and can be re-serialized as expected in most cases. The in
 	Date d = t.dateValue("test.date1"); // return a date. Value is a long 
 	List<String> list1 = t.listValue("test.list1"); // return a list
 	
+See below for a localization scheme.
+
 
 ## File Serialization Done Correctly
 
@@ -183,7 +205,15 @@ there is also the simple
 
 	OutputAdapter.toString(props);
 
-which uses PlainOutputFormat.
+which uses PlainOutputFormat. 
+
+OutputAdapter is intended to be a one-use class. It retains an instance variable of the Properties
+it was instantiated with so you could do something like:
+
+	OutputAdapter out = new OutputAdapter(props); 
+	out.write(file0, StandardCharset.US_ASCII); // outputs unicode escapes if required
+	out.write(file1, StandardCharset.UTF-8); // outputs just UTF-8 encoded characters
+	
 
 ## UTF-8 Support
 
@@ -193,8 +223,8 @@ order to do internationalization, it was necessary to run any UTF-8 characters i
 files through a command-line utility called ascii2native.exe, which escapes them. The escapes
 are then decoded when java.util.Properties loads the file. 
 
-Bracket Properties provides support to read .properties files using either the UTF-8 escape
-approach (for backwards-compatibility) or by directly encoding .properties files, for example:
+Bracket Properties provides support to read .properties files using either the unicode escape
+approach (for backwards-compatibility) or by directly encoding .properties files with UTF-8 characters, for example:
 
 UTF-8 encoded:
 
@@ -225,6 +255,37 @@ Both of these files have identical data, and the same Bracket API will read eith
 
 Note that the UTF-8 encoded file is 4086 bytes; the ASCII file with escapes is more than 12,000 bytes -
 a three-fold increase in size. 
+
+Bracket allows for new ideas on internationalization to be explored. For example, one could
+organize their i18n properties in this manner:
+
+    // i18n.properties
+
+    ja.email=Eメール
+    ja.userid=ユーザーID
+    ja.password=パスワード
+    ja.login=ログイン
+    ko.email=이메일
+    ko.userid=사용자 ID
+    ko.password=암호
+    ko.login=로그인
+    zh.email=电子邮件
+    zh.userid=用户帐号
+    zh.password=密码
+    zh.login=登录
+
+    // read properties
+    InputAdapter in = new InputAdapter();
+    in.readFile("i18n.properties", StandardCharsets.UTF-8);
+    
+    // language-specific accessor methods
+    I18N japanese = I18N.instance(in.props, Locale.JAPANESE);
+    I18N korean = I18N.instance(in.props, Locale.KOREAN);
+    I18N chinese = I18N.instance(in.props, Locale.CHINESE);
+    
+    chinese.get("email"); // returns 电子邮件
+    
+
  
 ## Easy Configuration Externalization 
 
@@ -234,7 +295,7 @@ it in deployment with an external config file.
 
 	// some externalized properties in user.home 
 	String home = System.getProperty("user.home"); 
-	String adminExtProps = home+"/admin.properties";
+	String appExtProps = home+"/app.properties";
 	
 	// some defaults in a template loaded from an embedded classpath
 	String tProps = "/template.properties";
@@ -242,7 +303,7 @@ it in deployment with an external config file.
 	// these will load in order, merge, and override as expected
 	Properties result = new LoadList()
 				.addReference(new PropertiesReference(ReferenceType.CLASSLOADED, tProps))
-				.addReference(new PropertiesReference(ReferenceType.EXTERNAL, adminExtProps))
+				.addReference(new PropertiesReference(ReferenceType.EXTERNAL, appExtProps))
 				.load()
 				.getProps();
 
@@ -273,9 +334,11 @@ You can also use the simple obfuscation with no password provided:
 later...
 
     sec.deobfuscate("key"); // the value of key is now deobfuscated and ready to use
+    props.get("key");
 	
-This will use the default key, which offers no security but does effectively obfuscate the value 
-if preventing casual visual inspection is the only objective.
+This will use the default key for obfuscation, which offers no security but does effectively obfuscate the value 
+if preventing casual visual inspection is the only objective. You can also provide a key but managing
+the key is outside the scope of Bracket. 
 
  
 ## XML Support
@@ -356,6 +419,7 @@ The value of the String "line" will look like this after the call to curly():
 
 	"This is a sentence." (not This is a sentence.)
 	
+
 
 
 

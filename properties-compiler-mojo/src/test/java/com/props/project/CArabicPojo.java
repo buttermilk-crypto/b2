@@ -30,6 +30,7 @@ public final class CArabicPojo extends PojoPropertiesImpl {
 
   public CArabicPojo() {
     super();
+    init();
   }
 
   public Properties init() {

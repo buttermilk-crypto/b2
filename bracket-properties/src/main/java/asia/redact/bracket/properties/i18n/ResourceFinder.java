@@ -24,6 +24,7 @@ import asia.redact.bracket.properties.line.LineScanner;
 
 /**
  * <p>
+ * An earlier scheme.
  * Given an absolute path to a folder containing a set of properties files (in resource bundle form) 
  * load the correct one based on the provided locale. 
  * </p>
@@ -38,6 +39,8 @@ import asia.redact.bracket.properties.line.LineScanner;
  *  These escapes are not processed during the parse - you can convert the encoding using the encoding API.</p>
  * 
  * @author Dave
+ * @deprecated
+ * 
  */
 public class ResourceFinder {
 

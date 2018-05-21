@@ -30,11 +30,11 @@ import asia.redact.bracket.properties.values.ValueModel;
  */
 public class OutputAdapter {
 
-	final Properties properties;
+	final Properties props;
 
 	public OutputAdapter(Properties properties) {
 		super();
-		this.properties = properties;
+		this.props = properties;
 	}
 	
 	/**
@@ -70,12 +70,38 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * This is specifically intended for compatibility with java.util.Properties, 
-	 * which outputs in ISO-8859-1 (US-ASCII)
+	 * Write to a file using a PlainOutputFormat. If the charset is ISO-8859-1 or US-ASCII, this will
+	 * call writeAsciiTo(file, charset) which triggers unicode escapes to be written. If the charset
+	 * is UTF-8 or something else, no unicode escapes will be generated
 	 * 
-	 * Use AsciiOutputFormat to get unicode escapes or an output format with similar 
+	 * @param file
+	 * @param charset
+	 */
+	public void writeTo(File file, Charset charset) {
+		
+		if(charset.name().equals("US-ASCII") || charset.name().equals("ISO-8859-1")) {
+			writeAsciiTo(file, new PlainOutputFormat());
+			return;
+		}
+		
+		try (
+			FileOutputStream out = new FileOutputStream(file);
+			OutputStreamWriter writer = new OutputStreamWriter(out,charset);
+		){
+			writeTo(writer, new PlainOutputFormat());
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * <p>This method is specifically intended for compatibility with java.util.Properties, 
+	 * which outputs in ISO-8859-1 (US-ASCII)</p>
+	 * 
+	 * <p>Use AsciiOutputFormat to get unicode escapes or an output format with similar 
 	 * filtering, as escapes are required
-	 * for compatibility.
+	 * for compatibility.</p>
 	 * 
 	 */
 	public void writeAsciiTo(File file, OutputFormat format) {
@@ -93,7 +119,7 @@ public class OutputAdapter {
 	
 	/**
 	 * This is specifically intended for compatibility with java.util.Properties, 
-	 * which outputs in ISO-8859-1 (US-ASCII)
+	 * which outputs in ISO-8859-1 (US-ASCII) with escapes
 	 * 
 	 */
 	public void writeAsciiTo(Writer writer) {
@@ -106,7 +132,7 @@ public class OutputAdapter {
 	
 	public void writeTo(Writer writer, OutputFormat format) throws IOException {
 		
-		Set<Entry<String,ValueModel>> set = properties.asMap().entrySet();
+		Set<Entry<String,ValueModel>> set = props.asMap().entrySet();
 		
 		writer.append(format.formatContentType());
 		writer.append(format.formatHeader());
@@ -120,12 +146,18 @@ public class OutputAdapter {
 		writer.append(format.formatFooter());
 	}
 	
+	/**
+	 * Same as above but with a PlainOutputFormat
+	 * 
+	 * @param writer
+	 * @throws IOException
+	 */
 	public void writeTo(Writer writer) throws IOException {
 		writeTo(writer,new PlainOutputFormat());
 	}
 	
 	/**
-	 * Write properties in the default manner to a String
+	 * Write properties in a default manner to a String. No unicode escapes are performed here
 	 * 
 	 * @param props
 	 * @return
@@ -142,7 +174,7 @@ public class OutputAdapter {
 	}
 	
 	/**
-	 * Write out a Sun DTD compatible XML-formatted string representation of the properties. The
+	 * Write out a legacy Sun DTD-compatible XML-formatted string representation of the properties. The
 	 * comments are not retained. This improves on the legacy Properties class only in 
 	 * that order is retained and CDATA is applied on values when required
 	 * 

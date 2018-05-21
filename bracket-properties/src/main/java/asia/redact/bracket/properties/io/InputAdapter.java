@@ -43,6 +43,8 @@ import asia.redact.bracket.properties.line.LineScanner;
 public class InputAdapter {
 
 	public final Properties props;
+	public File currentFile;
+	public Charset currentCharset;
 	
 	public InputAdapter() {
 		props = new PropertiesImpl(false).init();
@@ -65,6 +67,8 @@ public class InputAdapter {
 	 */
 	public void readFile(File path, Charset charset){
 		
+		currentFile = path;
+		currentCharset = charset;
 		
 		// if ascii, apply the filter for unicode escapes
 		if(charset.displayName().equals("ISO-8859-1") || charset.displayName().equals("US-ASCII")) {
@@ -94,10 +98,7 @@ public class InputAdapter {
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-			
 		}
-		
-		
 		
 	}
 	
@@ -221,8 +222,17 @@ public class InputAdapter {
 		} catch (Exception e) {
 			throw new RuntimeException("Parsing properties failed: "+e.getMessage());
 		}
-		
 	}
+
+	public File getCurrentFile() {
+		return currentFile;
+	}
+
+	public Charset getCurrentCharset() {
+		return currentCharset;
+	}
+	
+	
 
 }
 
