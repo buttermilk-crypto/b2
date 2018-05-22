@@ -6,6 +6,12 @@ something you wish properties files could do better, chances are bracket-propert
 
 This version is a complete rewrite and the API has changed quite a bit from 1.x. Requires Java 8+.
 
+## License
+
+This a FOSS project and uses a standard Apache license. See NOTICE.txt and LICENSE-2.0.txt fro details. 
+
+I'd love to hear from people who use this package. Send praise or blame to David R. Smith <davesmith.gbs@gmail.com>. 
+
 ## Get It
 
 For maven, use:

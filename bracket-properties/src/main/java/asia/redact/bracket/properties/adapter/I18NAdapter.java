@@ -1,3 +1,8 @@
+/*
+ *  This file is part of Bracket Properties
+ *  Copyright 2011-2018 David R. Smith, All Rights Reserved
+ *
+ */
 package asia.redact.bracket.properties.adapter;
 
 import java.util.Locale;
