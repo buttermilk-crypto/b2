@@ -16,40 +16,10 @@ than run-time.
 Another use-case for pre-compiled properties is when you want to obfuscate or encrypt the configuration (or
 parts of it) or you just want the configuration out of sight.  
 
-## PropertiesImpl vs. PojoPropertiesImpl
-
-The Mojo provides two options for superclass: PropertiesImpl and PojoPropertiesImpl. The PropertiesImpl subclass
-will be backed by a LinkedHashMap (the default). But the PojoPropertiesImpl subclass will be a true pojo
-with code like this:
-
-    public final class CArabicPojo extends PojoPropertiesImpl {
-
-      public static final long serialVersionUID = 1;
-
-      public final Entry line0 = new Entry("line0", 
-                    new Comment("# An optional comment"), 
-                    "The value of the property (can be multi-line)"
-                  );
-      public final Entry line1 = new Entry("line1", new Comment("# An optional comment"), "A second value");
-      
-      public final Entry line2 = ...
-  
-    }
-
-The name of the instance variable will be the key from the input properties. They key will be munged if required but of course
-you should try to use keys which help your cause. 
-
-Additionally the Pojo has a built-in array of references to the keys for easy iteration:
-
-    entries = new Entry[7];
-    entries[0] = line0;
-    entries[1] = line1;
-    entries[2] = line2;
-    ...
-
-
-
 ## Get It
+
+This sub-project contains a maven plugin which can create source-code for a pre-compiled class containing
+the contents of the properties file. This source file is easily integrated into your project.  
 
 Use this in your pom.xml file and fix up as required:
 
@@ -143,7 +113,7 @@ You can examine the source code which was generated in target/src-generated. If 
      }
     }
     
-For the PojoPropertiesImpl option, the output will look like this:
+For the PojoPropertiesImpl (and recommended) option, the output will look like this:
 
     package com.example;
 
